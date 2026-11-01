@@ -103,6 +103,7 @@ nav: projects
 - `src/agents/`：architect、artist、auditor、designer、player、programmer、reviewer 的角色说明；`src/skills/` 有 build、edit、start、self-evolve；`src/skeletons/` 有五种类型的可运行骨架；`src/engine/` 有 `RuntimeBridge`、`RuntimeClock`、`SceneTree` 等（Phaser 之上的运行时控制）。
 - 技术报告（2026-08-17，南京大学 PRLab）：三个要求——agent 可操作的项目状态、基于交互的验证、保留已验证的经验；三个贡献——AI 原生引擎、对抗式智能体团队（编排者加设计、美术、架构、编程、审计、试玩、评审，共八个角色）、免训练的自进化（骨架、已验证模块、协作契约）。已读第 1–4 页（摘要、引言、相关工作），方法与评测部分还没读。
 - README 的路线图：Godot、Unity 支持，以及扩展到 3D。
+- **活跃度（2026-11-01 查）**：2026-08-12 创建；8 月 13 次提交、9 月 8 次、10 月 3 次，最后一次实质更新是 10-01（10-13 只是更新群二维码）；没有未处理的 issue，未归档。节奏在放缓，所以只当设计参考，不再深读。对比：Autopilot 10-30 才公开、更新最勤；video-to-game 只有一个 10-29 的快照提交。
 
 **video-to-game**（`skills/video-to-game/`）
 - 这是一个给 agent 用的 skill：`SKILL.md`、`references/`（study-the-video、fal-assets、game-loop、look-and-post、playtest）、`scripts/`（`study_video.py`、`fal_asset.py`、`record_play.mjs`、`best_window.py`、`side_by_side.py`）、`templates/`（`game.html`、`play.mjs`）。
@@ -118,7 +119,7 @@ nav: projects
 
 ## 阅读与试用清单
 
-- [ ] 读完 VibeGame 技术报告的方法与评测部分（已读第 1–4 页）
+- [x] VibeGame：已读摘要、引言、相关工作；活跃度在放缓，当作设计参考，不再深读
 - [ ] 在隔离环境试装 Autopilot 的 UE 插件，跑一次“测试”提示，记录它留下什么证据
 - [x] 读 video-to-game 的 `window.__game` 状态契约和试玩文档（录制脚本只读了说明）
 - [ ] 核实低价多模态模型的能力与价格，做一个小批量分诊实验

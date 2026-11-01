@@ -4,11 +4,15 @@ title: AI 辅助的 UE 研发与排障体系
 permalink: /projects/ue-ai-infra/
 body_class: resume
 nav: projects
+parent: /projects/ai-native-game/
+parent_title: AI 原生游戏
 ---
 {% comment %}
   TODO(补充) —— 这个页面还是骨架。下面的 comment 块是待补内容，网页和页面源码里都看不到；补完后把对应块换成正文。
   若涉及公司内部的工具或数据，公开前请确认保密要求，不要放内部代码、截图和未公开的数据。
 {% endcomment %}
+
+这是 [AI 原生游戏]({{ '/projects/ai-native-game/' | relative_url }}) 的底座：其中“自动调试”那一环建立在这套复现与定位能力之上。
 
 ## 概述
 面向 Unreal Engine 的 AI 辅助研发与排障体系，由两部分组成：**AI 研发基建**（代码审查、性能分析、问题定位）和**自动化排障工作流**（逻辑层与渲染层的不停机排查闭环）。目标是让一个 bug 从被发现到被定位、被验证，尽量由工具串起来，而不是靠人逐个翻日志。
