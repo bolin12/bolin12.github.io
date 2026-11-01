@@ -40,6 +40,16 @@
           button.setAttribute("aria-expanded", String(!fold));
         });
       });
+      /* In a short window (or a zoomed one) the directory scrolls on its own. Keep its scroll position across pages and make sure the current page is in view, so the tree does not jump back to the top on every click. */
+      try { var saved = sessionStorage.getItem("side-scroll"); if (saved !== null) nav.scrollTop = Number(saved); } catch (e) {}
+      var cur = nav.querySelector("li.cur");
+      if (cur && nav.scrollHeight > nav.clientHeight) {
+        var a = cur.getBoundingClientRect(), n = nav.getBoundingClientRect();
+        if (a.top < n.top || a.bottom > n.bottom) nav.scrollTop += (a.top - n.top) - (n.height - a.height) / 2;
+      }
+      nav.addEventListener("scroll", function () {
+        try { sessionStorage.setItem("side-scroll", String(nav.scrollTop)); } catch (e) {}
+      });
       /* On phones the text comes first: start folded, with the current page named on the project row. */
       if (window.matchMedia && window.matchMedia("(max-width: 640px)").matches) {
         nav.querySelector(".side-toggle").click();
