@@ -77,9 +77,8 @@
       {Game Engine Developer}{}
       \resumeItemListStart
         \resumeItem{\textbf{Rendering features}: Customized Unreal Engine rendering features, including debug views, light shaft occlusion, translucent shadows, and light functions; ported engine plugins and adapted visual quality across platforms.}
-        \resumeItem{\textbf{Performance and resource optimization}: Skeletal mesh culling, shader permutation cleanup, offline shadow compression, HLOD unloading, texture downgrading, and spreading asset streaming across frames; separated per-platform assets and materials, managed consistently in the editor and at runtime.}
+        \resumeItem{\textbf{Performance optimization and resource infrastructure}: Skeletal mesh culling, shader permutation cleanup, offline shadow compression, HLOD unloading, texture downgrading, and spreading asset streaming across frames; separated per-platform assets and materials, managed consistently in the editor and at runtime.}
         \resumeItem{\textbf{Toolchain and stability}: Built debug and statistics tools for triangle counts, pixel cost, and scene resource usage; diagnosed and fixed crashes related to numerical precision, asset import, shader translation, and graphics APIs, using RenderDoc, Unreal Insights, and ProfileGPU to analyze rendering anomalies and performance bottlenecks.}
-        \resumeItem{\textbf{AI-assisted R\&D infrastructure}: Built AI-assisted development workflows for Unreal Engine (CodeGraph, UE Reviewer, UnrealMCP, TraceMCP, RenderTrail) covering code review, performance analysis, and issue diagnosis; explored closed-loop automated debugging and its adoption in the engine development process.}
       \resumeItemListEnd
     \resumeSubheading
       {Guangzhou Tencent Technology Co., Ltd.}{Mar 2024 -- Sep 2024}
@@ -100,8 +99,9 @@
         \resumeItem{\textbf{Regression checks}: Pinned a baseline with a 5\% tolerance check that returns a non-zero exit code on regression, so it can run in CI; an artificial 15\% slowdown was detected as +14.0\%.}
       \resumeItemListEnd
     \resumeProjectHeading
-      {\textbf{Automated Troubleshooting Workflow for UE Development}}{Jul 2026 -- Present}
+      {\textbf{AI-assisted UE Development and Troubleshooting System}}{Jul 2026 -- Present}
       \resumeItemListStart
+        \resumeItem{\textbf{AI-assisted R\&D infrastructure}: Built AI-assisted development workflows for Unreal Engine (CodeGraph, UE Reviewer, UnrealMCP, TraceMCP, RenderTrail) covering code review, performance analysis, and issue diagnosis; explored closed-loop automated debugging and its adoption in the engine development process.}
         \resumeItem{\textbf{Closed loop across logic and visuals}: Runtime intermediate state cannot be fully recorded and log-based approaches require restarting the process. Used Rewind to record the final state of the faulty track, Checkpoints to save key states for iterative replay, and WinDbg to record the faulty flow, giving a semi-automated troubleshooting loop without stopping the game.}
         \resumeItem{\textbf{Structured rendering data}: Rendering bugs involve the RDG and GPU layers; combined RDG and frame-capture data, starting from the anomalous region to locate resource or shader problems, forming a troubleshooting loop on the rendering side.}
       \resumeItemListEnd
