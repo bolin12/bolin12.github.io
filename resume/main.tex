@@ -12,7 +12,7 @@ REDACTED，%
 
 \ResumeTitle
 
-\section{教育经历}
+\section{教育经历} % （我调成了倒序，可改回）
 
 \ResumeItem
 {中国科学院大学}
@@ -27,15 +27,15 @@ REDACTED，%
 \section{工作经历}
 
 \ResumeItem
-{腾讯}
+{腾讯} % （原文为"广州腾讯科技有限公司"，我简写了，正式投递可改回）
 [游戏引擎开发]
 [2025.06--至今]
 
 \begin{itemize}
-\item \textbf{渲染特性开发}：负责 Unreal Engine 渲染特性定制，包括调试视图、光束遮蔽、半透明阴影、灯光函数；完成引擎插件移植与多平台画质适配。
-\item \textbf{性能与资源优化}：围绕 CPU/GPU、内存与加载效率做专项优化——骨骼剔除、Shader 变体清理、离线阴影压缩、HLOD 卸载、纹理降级、资源流送分帧；支持多平台资产与材质分离，编辑器与运行时统一管理。
-\item \textbf{研发工具链}：开发模型面数、像素开销、场景资源统计等调试与统计工具。
-\item \textbf{引擎稳定性}：定位并修复数值精度、资产导入、Shader 翻译及图形 API 相关崩溃；结合 RenderDoc、Unreal Insights、ProfileGPU 分析渲染异常与性能瓶颈。
+\item \textbf{渲染特性开发}：负责 Unreal Engine 渲染特性定制，包括调试视图、光束遮蔽、半透明阴影、灯光函数；完成引擎插件移植与多平台画质适配。（建议补：移植了哪些插件、覆盖哪些平台）
+\item \textbf{性能与资源优化}：围绕 CPU/GPU、内存与加载效率做专项优化——骨骼剔除、Shader 变体清理、离线阴影压缩、HLOD 卸载、纹理降级、资源流送分帧；支持多平台资产与材质分离，编辑器与运行时统一管理。（建议补数字：Shader 变体减少多少、内存降低 X MB、加载缩短 X\%、GPU 耗时降低多少）
+\item \textbf{研发工具链}：开发模型面数、像素开销、场景资源统计等调试与统计工具。（建议补：谁在用、节省了多少排查时间）
+\item \textbf{引擎稳定性}：定位并修复数值精度、资产导入、Shader 翻译及图形 API 相关崩溃；结合 RenderDoc、Unreal Insights、ProfileGPU 分析渲染异常与性能瓶颈。（建议补：修复崩溃的数量或影响范围）
 \item \textbf{AI 研发基建}：参与建设面向 Unreal Engine 的 AI 辅助研发工作流（CodeGraph、UE Reviewer、UnrealMCP、TraceMCP、RenderTrail），探索代码审查、性能分析、问题定位与自动化调试闭环。
 \end{itemize}
 
@@ -49,20 +49,20 @@ REDACTED，%
 \item \textbf{移动端 VRS}：开启可变着色率（VRS），降低着色压力。
 \end{itemize}
 
-\section{个人项目}
+\section{个人项目} % （我把神经材质调到最前面，可调整）
 
 \ResumeItem
 {神经材质（Neural BSDF）在 UE 的适配与优化}[]
 [2026.06--至今]
 \begin{itemize}
-\item 将神经材质接入 Unreal Engine 并做性能优化。
+\item 将神经材质接入 Unreal Engine 并做性能优化。（原文只有一句，待展开。建议补：推理耗时、与 baseline 对比、效果图、用了哪些优化手段，如 packed-fp16、tensor core 可行性评估）
 \end{itemize}
 
 \ResumeItem
 {无状态 Vulkan 层新特性}[]
 [2026.07--至今]
 \begin{itemize}
-\item 在 UE VulkanRHI 中实现 NoGraphicsAPI 风格的公共 Root 地址参数模型，保留原 Renderer 与业务 Shader，完成真实图形／计算路径、生命周期及性能成本对照验证。
+\item 在 UE VulkanRHI 中实现 NoGraphicsAPI 风格的公共 Root 地址参数模型，保留原 Renderer 与业务 Shader，完成真实图形／计算路径、生命周期及性能成本对照验证。（建议补：目的和收益，如降低 CPU 侧绑定开销，并写出对照结果）
 \end{itemize}
 
 \ResumeItem
@@ -70,7 +70,8 @@ REDACTED，%
 [2026.07--至今]
 \begin{itemize}
 \item \textbf{逻辑与画面层闭环}：运行时中间状态无法全量记录、日志方案需重启进程。用 Rewind 记录异常轨道终态，Checkpoint 保存关键检查点并迭代重放，windbg 记录异常流程，实现不停机的半自动 bug 排查闭环。
-\item \textbf{渲染层数据结构化}：渲染 bug 涉及 RDG 与 GPU 层，综合 RDG 与截帧数据，以异常区域为起点定位资源或 Shader 问题，形成渲染侧排查闭环。
+\item \textbf{渲染层数据结构化}：渲染 bug 涉及 RDG 与 GPU 层，综合 RDG 与截帧数据，以异常区域为起点定位资源或 Shader 问题，形成渲染侧排查闭环。（原文"最终窗口异常区域作为排查起点"表述不清，我按理解改写，请核对原意；建议补：定位过多少个真实问题）
 \end{itemize}
 
+% （说明：原"专业能力"栏已删除，关键词已分散在各条经历里。以上括号内容是建议或待核对项，定稿前请逐条处理并删除。）
 \end{document}
