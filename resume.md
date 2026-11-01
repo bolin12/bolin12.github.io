@@ -5,8 +5,6 @@ permalink: /resume/
 body_class: resume
 hide_title: true
 ---
-[下载 PDF 版]({{ "/assets/resume.pdf" | relative_url }}) （PDF 尚未生成，用 Overleaf 编译后放到 assets/resume.pdf）
-
 ## 教育经历 （我调成了倒序，与工作经历一致，可改回）
 <div class="entry"><span>中国科学院大学 · 硕士 · 计算机视觉 & 计算机图形</span><span class="when">2022.09 – 2025.06</span></div>
 <div class="entry"><span>中国海洋大学 · 本科 · 电子信息</span><span class="when">2018.09 – 2022.06</span></div>
