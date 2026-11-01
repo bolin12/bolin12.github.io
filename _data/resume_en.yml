@@ -25,10 +25,8 @@ sections:
             text: Performance and resources - skeletal mesh culling, shader permutation cleanup, offline shadow compression, HLOD unloading, texture downgrading, and spreading asset streaming across frames; separated per-platform assets and materials, managed consistently in the editor and at runtime. Tools and stability - built debug and statistics tools for triangle counts, pixel cost, and scene resource usage; diagnosed and fixed crashes related to numerical precision, asset import, shader translation, and graphics APIs, using RenderDoc, Unreal Insights, and ProfileGPU to analyze rendering anomalies and performance bottlenecks.
 
       - title: Guangzhou Tencent Technology Co., Ltd.
-        sub: Game Engine Developer (Intern)
+        sub: Game Engine Intern - ported the mobile Overdraw debug view, enabled VRS
         date: Mar 2024 – Sep 2024
-        points:
-          - text: Ported the Overdraw debug view to mobile (not supported in early UE5.0) to inspect how many shading layers effects produce, and enabled mobile variable rate shading (VRS) to reduce shading cost.
 
   - title: Projects
     items:
