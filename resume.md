@@ -4,10 +4,9 @@ title: 简历
 permalink: /resume/
 body_class: resume
 hide_title: true
+show_email: true
 ---
 {% assign r = site.data.resume %}
-{% assign pdf = site.static_files | where: "path", "/assets/resume.pdf" | first %}
-<p class="resume-head"><strong>{{ r.name }}</strong> · {{ r.email }}{% if pdf %} · <a href="{{ '/assets/resume.pdf' | relative_url }}">下载 PDF</a>{% endif %}</p>
 {% for s in r.sections %}
 <h2>{{ s.title }}{% if s.note %} <span class="note">{{ s.note }}</span>{% endif %}</h2>
 {% for it in s.items %}
