@@ -32,10 +32,7 @@ sections:
         sub: Game Engine Developer (Intern)
         date: Mar 2024 – Sep 2024
         points:
-          - label: Overdraw debug view on mobile
-            text: Early UE5.0 did not support the Overdraw view on mobile; ported it to mobile to inspect how many shading layers effects produce.
-          - label: Mobile VRS
-            text: Enabled variable rate shading (VRS) to reduce shading cost.
+          - text: Ported the Overdraw debug view to mobile (not supported in early UE5.0) to inspect how many shading layers effects produce, and enabled mobile variable rate shading (VRS) to reduce shading cost.
 
   - title: Projects
     items:
