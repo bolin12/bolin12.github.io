@@ -2,6 +2,7 @@
 layout: default
 ---
 <article class="{{ page.body_class }}">
+  {% if page.nav == 'projects' and page.url != '/projects/' %}<p class="crumb"><a href="{{ '/projects/' | relative_url }}">← 全部项目</a></p>{% endif %}
   {% unless page.hide_title %}<h1 class="page-title">{{ page.title }}</h1>{% endunless %}
   {{ content }}
 </article>

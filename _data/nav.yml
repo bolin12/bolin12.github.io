@@ -1,0 +1,10 @@
+# Top navigation. A page lights up its section by setting `nav: <key>` in its front matter.
+- key: projects
+  title: 项目
+  url: /projects/
+- key: resume
+  title: 简历
+  url: /resume/
+- key: me
+  title: 个人
+  url: /me/

@@ -3,6 +3,7 @@ layout: page
 title: 神经材质 GPU 性能基准与回归体系
 permalink: /projects/neural-bsdf-perf/
 body_class: resume
+nav: projects
 ---
 ## 问题
 神经材质(Neural BSDF)接入 Unreal Engine 后,需要持续比较不同实现(Latent、QTP、Latent128、Slab 近似等)的 GPU 开销。靠手工记录单次结果,难以复现,也容易被环境波动误导。

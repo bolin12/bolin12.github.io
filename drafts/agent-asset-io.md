@@ -3,6 +3,7 @@ layout: page
 title: Agent 读写 UE 资源的效率与评测
 permalink: /projects/agent-asset-io/
 body_class: resume
+nav: projects
 ---
 <p class="note">（草稿骨架，未发布，也是一份**规划**：下面还没有做出来的结果，别当作已完成写进简历。把这个文件从 drafts/ 移到 projects/ 即可上线。）</p>
 

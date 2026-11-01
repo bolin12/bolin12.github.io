@@ -3,6 +3,7 @@ layout: page
 title: AI 辅助的 UE 研发与排障体系
 permalink: /projects/ue-ai-infra/
 body_class: resume
+nav: projects
 ---
 {% comment %}
   TODO(补充) —— 这个页面还是骨架。下面的 comment 块是待补内容，网页和页面源码里都看不到；补完后把对应块换成正文。

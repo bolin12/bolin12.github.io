@@ -1,6 +1,5 @@
 title: Bolin
-description: 图形渲染与 GPU 优化的个人博客与简历
-# 推送前把下面两行改成你的信息;仓库名为 <用户名>.github.io 时 url 填 https://<用户名>.github.io,baseurl 留空
+description: 图形渲染与 GPU 优化:项目、简历与个人主页
 url: "https://bolin12.github.io"
 baseurl: ""
 lang: zh-CN
@@ -8,17 +7,11 @@ author: Bolin
 tagline: 图形渲染 / GPU 优化 · 正在学习实时渲染与神经材质
 theme: minima
 plugins:
-  - jekyll-feed
   - jekyll-seo-tag
 minima:
   social_links:
     github: bolin12
-header_pages:
-  - projects.md
-  - blog.md
-  - resume.md
-  - about.md
-show_excerpts: true
+# The top navigation lives in _data/nav.yml.
 # Authoring notes are hidden on the published site. The local preview (scripts/preview.ps1) turns them on
 # through _config_local.yml.
 show_notes: false

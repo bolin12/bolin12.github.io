@@ -26,11 +26,3 @@ layout: default
   </a>
   {% endfor %}
 </div>
-
-<h2 class="section">最新文章</h2>
-<ul class="posts">
-  {% for post in site.posts limit: 5 %}
-  <li><time>{{ post.date | date: "%Y-%m-%d" }}</time><a href="{{ post.url | relative_url }}">{{ post.title }}</a></li>
-  {% endfor %}
-</ul>
-<p><a href="{{ '/blog/' | relative_url }}">全部文章 →</a></p>

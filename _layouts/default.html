@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   {% seo %}
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
-  {% feed_meta %}
 </head>
 <body>
   <header class="site-header">
@@ -13,9 +12,8 @@
       <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
       {% if page.show_email %}<span class="header-note">{{ site.data.resume.email }}{% if page.lang_url %} · <a href="{{ page.lang_url | relative_url }}">{{ page.lang_label }}</a>{% endif %}</span>{% endif %}
       <nav>
-        {% for p in site.header_pages %}
-          {% assign pg = site.pages | where: "path", p | first %}
-          {% if pg %}<a href="{{ pg.url | relative_url }}"{% if page.url == pg.url %} class="active"{% endif %}>{{ pg.title }}</a>{% endif %}
+        {% for item in site.data.nav %}
+          <a href="{{ item.url | relative_url }}"{% if page.nav == item.key %} class="active" aria-current="page"{% endif %}>{{ item.title }}</a>
         {% endfor %}
       </nav>
     </div>
@@ -26,10 +24,7 @@
   <footer class="site-footer">
     <div class="wrap">
       <span>&copy; {{ 'now' | date: '%Y' }} {{ site.author | default: site.title }}</span>
-      <span>
-        <a href="https://github.com/{{ site.minima.social_links.github }}">GitHub</a> ·
-        <a href="{{ '/feed.xml' | relative_url }}">RSS</a>
-      </span>
+      <span><a href="https://github.com/{{ site.minima.social_links.github }}">GitHub</a></span>
     </div>
   </footer>
 </body>

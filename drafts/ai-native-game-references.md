@@ -3,6 +3,7 @@ layout: page
 title: AI 原生游戏:参考项目
 permalink: /projects/ai-native-game/references/
 body_class: resume
+nav: projects
 ---
 <p class="note">（草稿，只在本地预览可见。这是一页持续更新的参考清单：记录想考察的项目、已核实的事实和待回答的问题。“事实”来自各项目 README（2026-11-01 查看）；标着“设想”的是我的判断，还没验证。）</p>
 

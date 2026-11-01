@@ -2,6 +2,7 @@
 layout: page
 title: 项目
 permalink: /projects/
+nav: projects
 ---
 <div class="cards">
   {% for p in site.data.projects %}

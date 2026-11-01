@@ -3,6 +3,7 @@ layout: page
 title: SIGGRAPH 2026 高斯泼溅:论文速览与工程判断
 permalink: /projects/3dgs-survey/
 body_class: resume
+nav: projects
 ---
 <p class="note">（草稿骨架，未发布。把这个文件从 drafts/ 移到 projects/ 即可上线。内容来自你 D:\3dgs 里的论文笔记；括号处是待你补充的部分。公开笔记里复述论文要点前，请确认只用自己的话概括，不大段摘抄原文。）</p>
 

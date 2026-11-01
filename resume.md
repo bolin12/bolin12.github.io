@@ -7,5 +7,6 @@ hide_title: true
 show_email: true
 lang_url: /en/resume/
 lang_label: English
+nav: resume
 ---
 {% include resume.html data=site.data.resume %}
