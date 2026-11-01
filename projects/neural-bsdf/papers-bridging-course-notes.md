@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Bridging the Gap 课程讲义：Substrate 材质如何训练并回到 UE"
+title: "Bridging the Gap（SIGGRAPH 2025 课程）：Substrate 材质如何训练并回到 UE"
 permalink: /projects/neural-bsdf-perf/papers/bridging-course-notes/
 body_class: resume
 nav: projects
@@ -8,10 +8,10 @@ parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
 order: 52
-side_title: Bridging 课程讲义
+side_title: Bridging 课程
 mermaid: true
 ---
-对应 PDF：`Bridging_Offline_Real_Time_Neural_Materials_SIGGRAPH2025_course_notes.pdf`，共 11 页。本文页码均指 PDF 物理页，从 1 开始。更新：2026-10-18。
+对应资料：课程讲义（11 页）与幻灯片（27 页）。页码均指 PDF 物理页。更新：2026-11-01。
 
 本文基于该本地 PDF；“原文方法”与“UE 接入推断”分开说明。图是帮助理解的流程示意，不是论文原图。
 
@@ -76,3 +76,13 @@ sequenceDiagram
 先用现有 neuralappearance 证明资产与数值推理可用，再参照本讲义拆出 UE 参考响应导出、guide 导出、神经材质存储和各光照路径适配。课程给出了已实现的工程经验，但没有由此提供当前主线 UE 的现成插件。
 
 对应本地阅读点：Substrate 延迟光照遍历、环境光接口、神经材质运行时。这些是定位接口的参考，不能当作课程集成源码。
+
+## 幻灯片补充：数字怎样读
+
+幻灯片（27 页）与讲义讲同一件事，只记讲义里没有的几点：
+
+- **数字的口径**：第 13 页标明 RTX 5090、2K、fully path-traced；第 21 页的“5 倍少内存、base pass 4 倍快”来自该 UE 演示及其比较范围，不能当作整帧恒定加速 4 倍。
+- **容量分配**：第 19 页给背景材质与不同重点材质分配 2×16、2×32、3×64 的网络。容量应围绕窄高光和视角变化来选，而不是统一按材质名字分配。
+- **两份资料口径不同**：讲义写 6 UDIM、每组 6 张加 detail，幻灯片第 13 页写 54 张 4K。应分别按原页引用，不拼成统一的资产总数。
+- **第 23 页最值得保留**：它把辅助数据、光栅预卷积、传统 BSDF 近似放在一起，解释了为什么“只把 MLP 放进材质节点”仍不完整。
+- **第 12 页的采样解码器**：求值之外还有采样解码器与 PDF，不能只导出一个 RGB 网络。

@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 61
+order: 58
 side_title: GratNet
 mermaid: true
 ---

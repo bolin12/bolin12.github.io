@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 56
+order: 54
 side_title: Comprehensive 2025
 mermaid: true
 ---
@@ -62,4 +62,16 @@ PDF 7–9 页分别看重建、LOD、合成及位移实验；性能比较要区�
 
 正文 PDF 5 页明确把重要性采样视为正交问题，本文不解决它。因此它不提供与 NVIDIA 神经外观系统完全等价的“求值 + 专用采样器”方案。
 
-**UE 接入推断：**先对齐三平面坐标、量化缩放及响应约定，再研究合成和高度场。CUDA 实现不能直接贴入 UE HLSL；接入完整路径追踪仍需合适的方向采样及 PDF。详细内存布局见 [补充材料解析](/projects/neural-bsdf-perf/papers/comprehensive-neural-materials-supplement/)。
+**UE 接入推断：**先对齐三平面坐标、量化缩放及响应约定，再研究合成和高度场。CUDA 实现不能直接贴入 UE HLSL；接入完整路径追踪仍需合适的方向采样及 PDF。详细内存布局见 [补充材料解析](/projects/neural-bsdf-perf/papers/comprehensive-neural-materials/)。
+
+## 补充材料要点（2 页）
+
+补充材料给复现所需的精度、训练配置和追踪细节，不能替代正文。
+
+- **量化范围**：权重与激活是对称 per-tensor 的 8 位有符号量化，不使用 bias，每层有激活和权重两个缩放；三张特征平面保持 FP32 以便插值。“整个特征资产都是 INT8”是误读。
+- **存储大头**：U 平面为 `400×400×8` 或 `800×800×8`，H、D 平面各 `50×50×8`；U 平面才是主要存储，小网络的权重不是。
+- **数据**：实测 UBO2014 BTF 是 400×400、22,801 张角度组合图；合成数据是 800×800、10,000 张图，两类的空间与角度配置不能混算。
+- **训练**：AdamW、余弦退火加 warm restarts，最多 300 epochs，RTX 4090 上约 18 小时，是作者该配置下的耗时。
+- **GPU 推理**：四个 INT8 打包进一个 INT32，block 内先把权重装进共享内存，用 `dp4a` 做点积、INT32 累加，再反量化并为下一层重新量化。核心是 `Inference.cu` 里的一次 `__dp4a` 调用，依赖前面的打包顺序与缩放，不能孤立替换一个乘法就算等价移植。
+- **合成与追踪**：Curved ACF 用三次 Bézier 调 patch 选择分布；壳层内先在粗级找可能相交的 cell，再从该 cell 起在细级最多走 32 步求交。
+- **配置差异**：当前构造器默认 `dimU=16`，论文表 1 是 8，导出资产和内核必须与实际训练配置配对。

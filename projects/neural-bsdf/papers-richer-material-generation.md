@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 62
+order: 59
 side_title: 材质生成 2026
 mermaid: true
 ---

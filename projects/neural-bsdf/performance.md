@@ -10,47 +10,29 @@ group: 性能
 order: 20
 side_title: 性能报告
 ---
-更新：2026-10-21。本文回答：神经 BSDF 在 Substrate 延迟光照中的性能——测到了什么、为什么慢、改了什么、下一步做什么。
-
+更新：2026-11-01（数据截至 2026-10-21）。本文回答：神经 BSDF 在 Substrate 延迟光照中的性能——测到了什么、为什么慢、改了什么、下一步做什么。
 
 测试平台：RTX 4060 笔记本（Ada，功耗上限 130 W），UE 5.8.3，D3D12，Adaptive GBuffer + glint。
 
 ## 1. 当前结论
 
-| 项目 | 现状 | 见 |
-|---|---|---|
-| 全屏耗时（2048²，1 方向光 + 2 点光） | 神经 latent 约 16 ms、QTP 约 12.5 ms，完整 OpenPBR Substrate 约 8–8.8 ms；即 latent 约为 OpenPBR 的 2 倍、QTP 约 1.45 倍 | 3.4 |
-| 相对 M1 | latent 38.1 → 15.7 ms（2.4×），QTP 81.4 → 11.5 ms（7.1×），来自 R1 的打包权重 | 3.4 |
-| 数值 | dp4a QTP 与 M1 逐字节一致；fp16 latent 与 M1 相对 L1 0.14%，对教师误差不变（11.77%） | 3.4 |
-| 对比场景中的开销 | 神经物体使编辑器帧的 Lights 增加 0.49 ms | 4.2 |
-| 主要瓶颈 | 神经光照排列每线程 168 个寄存器，最多驻留 12 个 warp（理论占用率约 25%）；已驻留的 warp 以取指等待（约 23%）和数学管线饱和（约 35%）为主 | 4.4–4.6 |
-| 已验证无效 | 减少同时存活的激活值（R2）、去掉不执行的 fp32 核（R3）、缩小融合层代码（R4）：都没有可测收益 | 3.5–3.7 |
-| 下一步 | 拆成独立绘制已在 M2 实测更慢（[M2 报告](/projects/neural-bsdf-perf/milestones/m2-storage-decoupling/)）；方向改为降低神经核本身的寄存器、减少按灯重复的计算 | 6 |
+| 项目 | 现状 |
+|---|---|
+| 全屏耗时（2048²，1 方向光 + 2 点光） | 神经 latent 约 16 ms、QTP 约 12.5 ms，完整 OpenPBR Substrate 约 8–8.8 ms；latent 约为 OpenPBR 的 2 倍，QTP 约 1.45 倍 |
+| 相对 M1 | latent 38.1 → 15.7 ms（2.4×），QTP 81.4 → 11.5 ms（7.1×），来自 R1 的打包权重 |
+| 数值 | dp4a QTP 与 M1 逐字节一致；fp16 latent 与 M1 相对 L1 0.14%，对教师误差不变（11.77%） |
+| 对比场景中的开销 | 神经物体使编辑器帧的 Lights 增加 0.49 ms |
+| 主要瓶颈 | 神经光照排列每线程 168 个寄存器，最多驻留 12 个 warp（理论占用率约 25%）；已驻留的 warp 以取指等待（约 23%）和数学管线饱和（约 35%）为主 |
+| 已验证无效 | 减少同时存活的激活值（R2）、去掉不执行的 fp32 核（R3）、缩小融合层代码（R4）：都没有可测收益 |
+| 下一步 | 拆成独立绘制已在 M2 实测更慢；方向改为降低神经核本身的寄存器、减少按灯重复的计算（第 5 节） |
 
-## 2. 基准方法
+## 2. 测量方法
 
-`UNeuralAppearanceEditorLibrary::BenchmarkMaterialShading`（编辑器 MCP 工具 `benchmark_material_shading`；批量脚本 `Scripts/NeuralAppearance/run_shading_benchmarks.py`）：
+基准是一块铺满正交视图的四边形，所有像素都着色，一盏方向光加两盏点光，均不投影，关闭 GI、反射、雾、AO 和抗锯齿；通过完整延迟管线渲染，每次捕获前后插入 GPU 时间戳。操作步骤见 [GPU Trace 手册](/projects/neural-bsdf-perf/gpu-trace-guide/)，批量采集与回归检查见 [基准与回归](/projects/neural-bsdf-perf/benchmark/)。
 
-- 独立 `FPreviewScene` 中一块铺满正交视图的四边形，所有像素都着色；一盏方向光 + 两盏点光，均不投影；关闭 GI、反射、雾、AO、抗锯齿。
-- 通过完整延迟管线渲染（`SceneCaptureComponent2D`，`SCS_SceneColorHDR`），每次捕获前后插入 GPU 时间戳（`RQT_AbsoluteTime`）。
-- 报告写入插件 `Saved/Benchmarks/Shading/<Name>.json`，脚本另写 `<prefix>_summary.json`（含运行期间的 SM 时钟和 P-state）。
-- 分辨率：M1 及之前 1024²，R0 起 2048²（约 420 万像素）。
-- 数值验证用 `capture_material_brdf`（种子 11，128²；latent 512 对、QTP 128 对）加 `compare_captures.py`，参考捕获为 `OPBR_Neural_M1`、`QTP_After`、`OPBR_Teacher`。
+**R0：计时方式的修正（2026-10-20）。** M1 及之前是「渲染一次、同步读回时间戳、再渲染下一次」。GPU 每次只忙几毫秒就等待 CPU，驱动判定为空闲，SM 时钟停在 210–700 MHz（最高约 3 GHz），结果随时钟大幅波动：锁屏时测得 Slab 19.7 ms，是 M1 记录的约 12 倍。修正是每次 tick 连续提交 16 次捕获、双缓冲读回、预热 3 秒，并用 nvidia-smi 每 250 ms 记录 SM 时钟和 P-state。
 
-### 2.1 R0：计时方式的修正（2026-10-20）
-
-M1 及之前的计时方式是「渲染一次、同步读回时间戳、再渲染下一次」，并丢弃前 10 帧。GPU 每次只忙几毫秒就等待 CPU，驱动判定为空闲（clock event reason `Idle`），SM 时钟停在 210–700 MHz（最高约 3 GHz），结果随当时的时钟大幅波动：
-
-- 锁屏时测得 Slab 19.7 ms，是 M1 记录的约 12 倍；解锁后仍有 8.8 ms，单次运行内从 1.3 ms 到 26.9 ms 不等。
-- M1 时编辑器在前台持续渲染一个较重的地图，恰好把时钟拉高；M1 数据中 latent 12.5–20.8 ms 的波动来源于此。
-
-修正：
-
-- 每次 tick 连续提交 16 次捕获，每次有自己的时间戳；双缓冲读回（提交本批后读取上一批），GPU 不会断粮。
-- 以 3 秒时长预热，让驱动把时钟升上去再采样。
-- 运行期间用 nvidia-smi 每 250 ms 采样 SM 时钟和 P-state。
-
-修正后仍有一个下限：渲染线程提交整条延迟管线约需 4–4.6 ms，低于它的测量都只是这个下限。GPU 工作很轻的材质（Slab、OpenPBR）测得的是提交间隔而不是着色成本，所以**不再用 Slab 估计固定开销、也不再相减**。分辨率实验（打包权重开启）：
+修正后仍有一个下限：渲染线程提交整条延迟管线约需 4–4.6 ms，低于它的测量只是提交间隔，所以不再用 Slab 估计固定开销、也不再相减。分辨率实验：
 
 | 分辨率 | Slab | 神经 latent | 神经 QTP |
 |---|---|---|---|
@@ -58,221 +40,110 @@ M1 及之前的计时方式是「渲染一次、同步读回时间戳、再渲�
 | 1024² | 2.76–3.47 ms | 5.27 ms | 5.15 ms |
 | 2048² | 4.64 ms | 16.14 ms | 11.84 ms |
 
-1024² 时神经材质只比下限高一点，2048² 时远高于下限并随像素数增长，是 GPU 受限，因此基准改为 2048²。
+2048² 时神经材质远高于下限并随像素数增长，是 GPU 受限，因此基准改为 2048²。
 
-### 2.2 比较规则
+**比较规则：**
 
-- 每一轮在同一时段按 A-B-A 测量，每次切换代码或开关后重启编辑器、切到空地图 `/Engine/Maps/Entry`。同一代码上午和下午可相差 5–8%，同一时段内第一次运行也往往最快。
-- 用不受改动影响的完整 OpenPBR 作对照；对照本身漂移时，比较「神经 / OpenPBR」的比值。
-- 测量环境（设置方法见 [Guide.md](/projects/neural-bsdf-perf/gpu-trace-guide/) 第 1 节）：编辑器不受后台限帧（「Use Less CPU when in Background」关闭，或启动参数 `-ini:EditorSettings:[/Script/UnrealEd.EditorPerformanceSettings]:bThrottleCPUWhenNotForeground=False`）；UnrealEditor.exe 的 NVIDIA 电源管理为「Prefer maximum performance」；不在锁屏状态下测时间。
+- 每一轮在同一时段按 A-B-A 测量，每次切换代码或开关后重启编辑器、切到空地图。同一代码上午和下午可相差 5–8%。
+- 用不受改动影响的完整 OpenPBR 作对照；对照本身漂移时比较「神经 / OpenPBR」的比值。
+- 编辑器不能处于后台限帧状态，显卡电源管理设为最高性能，不在锁屏状态下测时间。
 
 ## 3. 优化历程
 
-| 轮次 | 内容 | 结果 | 提交 |
+| 轮次 | 内容 | 结果 |
+|---|---|---|
+| M1 | 权重进常量缓冲、按形状完全展开、QTP 量化外提 | latent 5.8×、QTP 4.7×（旧计时方式，绝对值受时钟影响） |
+| R0 | 计时方式修正，基准改为 2048² | 见第 2 节 |
+| R1 | 打包权重：fp16 latent、dp4a QTP | **latent 2.4×、QTP 7.1×** |
+| R2 | 融合层、产生即打包，减少同时存活的激活值 | 逐字节一致，无可测收益，保留 |
+| R3 | 从光照 shader 中去掉不执行的 fp32 核 | latent 慢约 5%，未合入 |
+| R4 | 融合层改为按行对循环，缩小代码 | 无收益，未合入 |
+
+**基线（M0，旧计时方式，1024²）：** 简单 Slab 1.25 ms，完整 OpenPBR 3.57 ms，神经 latent 108.8 ms，神经 QTP 187.5 ms。朴素求值器慢的原因：权重存在 R32F 纹理里，每次乘加一次 `Texture.Load`（latent 约 1440 次、QTP 约 2500 次）；循环边界由数据决定无法展开，动态索引的数组溢出到 local memory；QTP 对每次乘加都重新量化输入。
+
+**M1：** 权重放进 View 统一缓冲的 32 KB 常量缓冲；为 latent 与 QTP 各写一个完全展开的核，权重偏移全是字面量，激活留在寄存器；QTP 每层只量化一次输入。捕获与优化前逐位一致，latent 108.8 → 18.8 ms，QTP 187.5 → 40.0 ms（旧计时）。当时据此估计常量读取是主要瓶颈，后被 GPU Trace 推翻。放弃的做法：用 `WaveReadLaneFirst` 循环让模型编号在 wave 内统一，会触发 `DXGI_ERROR_DEVICE_HUNG`。
+
+**R1：** 为每个特化网络追加打包权重（latent 为 FP16x2，QTP 为 INT8x4），QTP 在 SM6 上用 `dot4add_i8packed`，一条指令 4 次乘加。2048²、A-B-A：
+
+| 材质 | M1 | R1 | 加速 |
 |---|---|---|---|
-| M1 | 权重进常量缓冲、按形状完全展开、QTP 量化外提 | latent 5.8×、QTP 4.7×（旧计时方式，绝对值受时钟影响） | `90ef901a5ae3` |
-| R0 | 计时方式修正，基准改为 2048² | 见 2.1 | `cb8343eba8c2`、`1928e0f34f57` |
-| R1 | 打包权重：fp16 latent、dp4a QTP，开关 `r.NeuralBSDF.PackedWeights` | **latent 2.4×、QTP 7.1×** | `d1a16cc8b894` |
-| R2 | 融合层、产生即打包，减少同时存活的激活值 | 逐字节一致，无可测收益，保留 | `5b1528e0db04` |
-| R3 | 从光照 shader 中去掉不执行的 fp32 核 | latent 慢约 5%，未合入 | `605102e1d3eb`（仅记录） |
-| R4 | 融合层改为按行对循环，缩小代码 | 无收益，未合入 | `263df1c4e82e`（仅记录） |
-
-### 3.1 基线（M0，旧计时方式，1024²）
-
-| 材质 | GPU 中位数 |
-|---|---|
-| 简单 Slab（`BasicShapeMaterial`） | 1.25 ms |
-| 完整 OpenPBR Substrate（`M_Teacher_OpenPBR`，金属 + coat + fuzz） | 3.57 ms |
-| 神经 latent（`MI_NeuralSubstrate_OPBR_Latent`，10→32→32→3） | 108.8 ms |
-| 神经 QTP（`MI_NeuralSubstrate_QTP`，12→32→32→32→3 INT8） | 187.5 ms |
-
-M0 朴素求值器慢的原因：
-
-- 权重存在 R32F 纹理里，每次乘加一次 `Texture.Load`（latent 每次求值约 1440 次，QTP 约 2500 次）。
-- 循环边界由数据决定，无法展开；`float A[32], B[32]` 动态索引，溢出到 local memory。
-- QTP 对每次乘加都重新量化输入（除法、`round`、`clamp`）。
-
-### 3.2 M1：常量缓冲与形状特化（2026-10-19）
-
-1. **权重进常量缓冲**：View 统一缓冲新增 `NeuralBSDFConstants[2048]`（32 KB）与 `NeuralBSDFModelBase`，`UNeuralBSDFAtlasSubsystem` 按网络纹理的布局打包所有模型。
-2. **形状特化**：`Engine/Shaders/Private/NeuralBSDF/NeuralBSDFSpecialized.ush` 为 latent 与 QTP 两种形状各写一个完全展开的核，权重偏移全是字面量，激活留在寄存器；其他形状回退到通用求值器。
-3. **QTP 输入量化外提**：每层只量化一次输入，运算与通用求值器逐元素相同。
-4. **放弃的做法**：用 `WaveReadLaneFirst` 循环让模型编号在 wave 内统一，在 `DeferredLightPixelMain` 中触发 `DXGI_ERROR_DEVICE_HUNG`（推测编译器把循环不变的 wave 读取提到循环外，不匹配的 lane 永远无法退出）。
-
-结果（旧计时方式，1024²）：捕获与优化前逐位一致。latent 108.8 → 18.8 ms，QTP 187.5 → 40.0 ms；Slab 1.69 ms，OpenPBR 4.80 ms。当时据此估计常量读取是主要瓶颈，后被 GPU Trace 推翻（见第 5 节）。
-
-### 3.3 R0：计时方式
-
-见 2.1。
-
-### 3.4 R1：打包权重（2026-10-20）
-
-`UNeuralBSDFAtlasSubsystem` 为每个特化网络追加一份打包权重：latent 为 FP16x2 行、QTP 为 INT8x4 行，偏移写入模型头部 43 / 42 号槽位。`NeuralBSDF_EvalUniformModel` 在偏移非零时走 `NeuralBSDF_EvalLatentFp16`，以及（SM6 上）`NeuralBSDF_EvalQTPDp4a`（`dot4add_i8packed`，一条指令 4 次乘加）。`r.NeuralBSDF.PackedWeights 0` 不写打包区，回到 M1 的 fp32 核，改变时自动重建图集。
-
-耗时（2048²，A-B-A，时钟 2880 MHz）：
-
-| 材质 | M1（B） | R1（A1 / A2） | 加速 |
-|---|---|---|---|
-| 简单 Slab | 4.96 ms | 4.75 / 4.60 ms | 提交下限，不比较 |
 | 完整 OpenPBR | 7.94 ms | 8.25 / 7.89 ms | 不涉及神经 |
 | 神经 latent | 38.12 ms | 15.51 / 15.87 ms | **2.4×** |
 | 神经 QTP | 81.45 ms | 11.52 / 11.51 ms | **7.1×** |
 
-数值验证：
+数值上，打包关闭时逐字节一致；dp4a QTP 与 M1 逐字节一致（整数累加精确）；fp16 latent 与 M1 相对 L1 0.14%，对教师 11.77%，与 M1 相同。QTP 从 81 ms 降到 11.5 ms，说明 dp4a 路径确实在执行。
 
-| 对比 | 结果 |
-|---|---|
-| 打包关闭的 latent / QTP vs `OPBR_Neural_M1` / `QTP_After` | 逐字节一致 |
-| dp4a QTP vs `QTP_After` | 逐字节一致（整数累加精确） |
-| fp16 latent vs `OPBR_Neural_M1` | 相对 L1 0.14%，中位 PSNR 64.5 dB，能量比 1.0003 |
-| fp16 latent vs 教师 | 相对 L1 11.77%（M1 同为 11.77%） |
+**R2–R4：三轮针对寄存器和代码体积的局部改动，全部没有收益。**
 
-- QTP 从 81 ms 降到 11.5 ms，说明 dp4a 路径确实在执行（逐字节一致本身无法区分走了哪条路径）。
-- 打包开启时 latent 结果与 M1 不同、关闭时逐字节一致，也确认了 2026-10-19 的 GPU Trace（第 4 节）运行的是 fp16 核。
-- fp16 / dp4a 核最早由另一会话写在工作区中、未经测量；R1 补上开关、测量与验证后提交。
-
-### 3.5 R2：减少同时存活的激活值（2026-10-20，无收益，保留）
-
-- fp16 latent：第二个隐藏层与输出层融合，每对隐藏值产生后立即累加进 3 个输出和，不再保留 G[32]；累加顺序不变。
-- dp4a QTP：每层输出产生后立即量化并 4 个一组打包（32 个 float 变为 8 个 uint）；最后一个隐藏层与输出层融合。
-
-R2 latent 与 R1 fp16 逐字节一致，R2 QTP 与 M1 逐字节一致。A-B-A（R1 → R2 → R1）：latent 16.08 / 16.45 / 16.87 ms，QTP 12.44 / 12.59 / 12.43 ms，OpenPBR 8.00 / 8.80 / 8.73 ms，差异在噪声内。保留 R2 是因为结果逐字节一致、代码更清楚。
-
-### 3.6 R3：去掉不执行的 fp32 核（2026-10-20，变慢，未合入）
-
-假设：168 个寄存器和约 300 KB 代码由同一 shader 中不执行的 fp32 分支决定（寄存器分配按最差分支）。做法：删除 fp32 latent 特化核，fp32 QTP 核只在非 SM6 编译，打包关闭时走通用求值器。
-
-逐字节一致，但 A-B-A（R2 → R3 → R2）：latent 16.83 / **17.57** / 16.60 ms，QTP 12.62 / 12.75 / 12.58 ms，OpenPBR 8.70 / 8.77 / 8.70 ms。假设不成立，代码未合入。R3 版本的寄存器数没有读到：当时 GPU Trace 受编辑器后台限帧影响录不到场景帧（[Guide.md](/projects/neural-bsdf-perf/gpu-trace-guide/) 3.5 节），问题解决后录的是 R2 代码。
-
-### 3.7 R4：融合层改为循环（2026-10-20，无收益，未合入）
-
-假设：约 23% 的 No Instruction 来自展开后的代码体积。做法：fp16 latent 的融合层从 32 行完全展开改为 16 次循环（每次两行，内层仍展开），该层代码约为原来的 1/16，计算顺序不变。
-
-逐字节一致。A-B-A（R2 → R4 → R2）：latent 15.99 / 16.79 / 16.55 ms，OpenPBR 8.00 / 8.74 / 8.76 ms；latent / OpenPBR 为 2.00 / 1.92 / 1.89，与 R2 相当。这一层的代码体积不是瓶颈，代码未合入。
+- R2 把 latent 第二隐藏层与输出层融合、QTP 每层产生即打包，逐字节一致；A-B-A 差异在噪声内，因代码更清楚而保留。
+- R3 假设 168 个寄存器和约 300 KB 代码来自同一 shader 里不执行的 fp32 分支，删掉后 latent 反而慢到 17.57 ms（R2 为 16.83 / 16.60），假设不成立，未合入。
+- R4 假设约 23% 的取指等待来自展开后的代码体积，把融合层的 32 行展开改成 16 次循环，latent / OpenPBR 比值与 R2 相当，未合入。
 
 ## 4. 瓶颈分析（GPU Trace）
 
-### 4.1 方法
+**方法。** 用 Nsight Graphics GPU Trace（Ada，单帧，real-time shader profiler）录一个对比场景：神经列和教师列各一个球和一个材质预览网格，一盏方向光、两盏点光。对照是同一相机下录制前移除神经物体。编辑器帧里还有 Slate、TSR 等，所以本节只用差值说话，绝对耗时以第 3 节的全屏基准为准。
 
-- 场景：`/NeuralAppearanceLab/Maps/L_NeuralCaptured_OPBR`（`BuildPairedComparison` 生成：教师列 Y=+150，神经列 Y=−150，各一个球和一个材质预览网格；一盏方向光、两盏点光）。编辑器视口相机 (560, 0, 230)、俯仰 −14°、偏航 180°，两列在画面中对称，屏幕面积相同。
-- 工具：Nsight Graphics 2026.3.1 GPU Trace，Ada，`Throughput Metrics`，real-time shader profiler，单帧；用 nsight-graphics MCP 读取导出表和二进制元数据。
-- 对照：同一相机，录制前从内存中的关卡移除 `Proto_Sphere_Neural`、`Proto_Preview_Neural`（未保存地图），两份 trace 按范围名称对齐求差。
-- 编辑器帧包含 Slate、编辑器图元合成、TSR（1897×638 → 2866×963），所以本节只用差值说话，绝对耗时以第 3 节的全屏基准为准。
-- 被测代码：2026-10-19 的两份 trace 运行的是 fp16 核（R1 已确认），4.6 节的寄存器表来自 R2 代码（HEAD `263df1c`）。
-
-### 4.2 耗时差值
+**耗时差值**（含神经减不含神经）：
 
 | 范围 | 含神经 | 不含神经 | 差值 |
 |---|---|---|---|
 | Lights | 1.738 ms | 1.245 ms | +0.493 ms |
-| UnbatchedLights | 1.154 ms | 0.715 ms | +0.439 ms |
-| Proto_Sun（含阴影投射 0.36 ms） | 0.671 ms | 0.476 ms | +0.195 ms |
+| Proto_Sun | 0.671 ms | 0.476 ms | +0.195 ms |
 | Proto_PointWarm | 0.232 ms | 0.101 ms | +0.132 ms |
 | Proto_PointCool | 0.243 ms | 0.138 ms | +0.105 ms |
 | BasePass | 0.244 ms | 0.216 ms | +0.028 ms |
 
-整帧 10.95 ms；UnbatchedLights 范围内 SM 吞吐 53.7%、未分配 warp 槽位 56.2%（计算偏重但没跑满）。
+**识别神经排列。** `DeferredLightPixelMain` 在这一帧有 8 个排列，只有两个（点光、方向光）在移除神经物体后完全消失，它们就是神经光照，对应 Substrate 的 Complex Special tile。识别靠「有或无」，不靠数值大小：占用最高的那个排列两边都有，是普通 Substrate 排列。
 
-### 4.3 神经排列的识别
+**停顿分布（PC 采样）。** 取指等待（No Instruction）约 23%，数学管线饱和（Math Pipe Throttle 约 18–19.5%，加 Not Selected 约 16%）约 35%，常量读取等 MIO 等待（Short Scoreboard）只有 12–14%。
 
-`DeferredLightPixelMain` 在这一帧有 8 个排列。只有 `0x75eaf9e05a36292c`（点光）和 `0xa69bffe311e6f260`（方向光）在移除神经物体后完全消失，它们是神经光照；占用最高的 `0xba48d01ac25061e0` 两边都有，是普通 Substrate 排列。识别靠「有或无」，不是数值大小：平均 warp 数按范围时长平均，范围长度不同，普通排列在「不含神经」一侧数值更高并不代表变慢。
+**warp 启动受限。** 含神经时，三盏灯的「寄存器分配失败而无法启动 warp 的周期数」都约为不含神经时的 2.4 倍，而像素 warp 数点光只多约 7%、方向光不变：神经 warp 不多，但占用寄存器多、运行时间长，后续 warp 无法启动。注意百分比接近饱和不能单独用，不含神经时点光也有 72–93%，Substrate 光照本身就受寄存器限制，真正的差异在绝对周期数。
 
-4.6 节的 R2 trace 中，神经排列对应 Substrate 的 Complex Special tile（按代码体积推断）；关闭 `r.Shaders.ExtraData` 后哈希会变，例如点光为 `0x9c9ab1ce10fb7cb5`、方向光为 `0x9b6a015fab4569c6`。
+**寄存器与代码体积。**
 
-### 4.4 停顿分布（PC 采样）
+| 排列 | 代码块：大小 / 寄存器 |
+|---|---|
+| 神经，点光 | 597 KB / 128、303 KB / **168** |
+| 神经，方向光 | 580 KB / 168、298 KB / **168** |
+| 普通 Complex，点光 | 99 KB / 128、59 KB / 118 |
+| 普通 Single，点光 | 86 KB / 72、49 KB / 63 |
+| 普通 Simple，点光 | 24 KB / 48、12 KB / 48 |
 
-| 原因 | `0x75ea…`（23550 样本） | `0xa69b…`（14879 样本） |
-|---|---|---|
-| No Instruction | 22.9% | 22.6% |
-| Math Pipe Throttle | 18.0% | 19.5% |
-| Not Selected（就绪未被选中） | 16.3% | 15.9% |
-| Short Scoreboard | 11.8% | 14.4% |
-| Long Scoreboard | 11.5% | 9.4% |
-| Miscellaneous | 8.2% | 7.2% |
-| Dispatch Stall | 4.5% | 5.4% |
+Ada 每个 SM 有 65536 个寄存器，一个 warp 需要 32 × 168 = 5376 个，最多驻留 12 个 warp（上限 48），理论占用率约 25%，这是寄存器受限的直接原因；约 300 KB 代码远超指令缓存，对应约 23% 的取指等待。R2 与之前的神经排列代码块大小和寄存器数几乎一样，说明融合没有改变寄存器分配，寄存器和代码体积更可能来自 fp16 核本身完全展开并内联进 `DeferredLightPixelMain`。
 
-取指等待约 23%（热点 PC 跨约 50 KB），数学管线饱和（Math Pipe Throttle + Not Selected）约 35%，常量读取等 MIO 等待（Short Scoreboard）只有 12–14%。
+**可信度。**
 
-### 4.5 warp 启动受限
+| 结论 | 可信度 |
+|---|---|
+| 神经光照是 Complex Special tile 的两个排列（有无对照） | 高 |
+| 神经光照的占用率受寄存器限制，寄存器受限周期约 2.4 倍 | 高 |
+| 基线 Substrate 光照本身也受寄存器限制 | 高 |
+| 算术吞吐受限（R1 减少指令数确实有效） | 中高 |
+| 该视角下神经物体光照开销约 0.44–0.49 ms（单帧差值） | 中 |
+| 取指是重要停顿（但 R4 缩小一层代码没有收益） | 中 |
+| 常量读取不是主瓶颈 | 中 |
 
-两盏点光不投影，范围内只有光照绘制，最适合单独观察。指标：`tpc__warp_launch_cycles_stalled_shader_ps_reason_register_allocation`（像素 warp 因寄存器分配失败无法启动的周期）、`tpc__warps_inactive_sm_active`（未分配槽位）、`tpc__warps_launched_shader_ps`（启动的像素 warp 数）。
+## 5. 经验与下一步
 
-| 灯 | 版本 | 耗时 | 寄存器受限（时间占比） | 寄存器受限周期 | 未分配槽位 | 像素 warp 数 |
-|---|---|---|---|---|---|---|
-| PointCool | 含神经 | 0.243 ms | 98.2% | 5.24M | 64.1% | 25947 |
-| PointCool | 不含神经 | 0.138 ms | 72.0% | 2.17M | 33.3% | 24210 |
-| PointWarm | 含神经 | 0.232 ms | 96.4% | 4.92M | 61.0% | 25411 |
-| PointWarm | 不含神经 | 0.101 ms | 93.3% | 2.08M | 39.5% | 23826 |
-| Sun | 含神经 | 0.671 ms | 41.1% | 6.06M | 52.1% | 85619 |
-| Sun | 不含神经 | 0.476 ms | 24.5% | 2.57M | 43.2% | 86059 |
+分析途中被对照实验推翻的判断：
 
-- 百分比接近饱和，不能单独用：不含神经时点光也有 72–93%，UE 的 Substrate 光照本身就受寄存器限制。
-- 绝对周期数才是差异：三盏灯一致，含神经时约为 2.4 倍，而像素 warp 数点光只多约 7%、方向光不变。神经 warp 不多，但占用寄存器多、运行时间长，后续 warp 无法启动。
+1. **「98% 寄存器受限」归因到神经核。** 基线已有 72–93%，差异在绝对周期数。
+2. **把占用最高的排列当成神经排列。** 有无对照显示它是普通排列，基于它的停顿分析作废。
 
-### 4.6 寄存器数与代码体积
-
-`list_gpu_trace_shader_pipelines` 给出每个管线的驱动代码块（每个像素着色器有两个代码块，下表两个都列；KB 为 1024 字节；执行的是寄存器 168 的那一块，PC 样本都落在它上面）：
-
-| 排列 | tile（推断） | 代码块：大小 / 寄存器 | 来源 |
-|---|---|---|---|
-| 神经，点光 | Complex Special | 597 KB / 128、303 KB / **168** | 10-19（R1 等价）与 R2 相同 |
-| 神经，方向光 | Complex Special | 580 KB / 168、298 KB / **168** | 10-19（R1 等价）与 R2 相同 |
-| 普通，点光 | Complex | 99 KB / 128、59 KB / 118 | R2 |
-| 普通，方向光 | Complex | 88 KB / 119、54 KB / 96 | R2 |
-| 普通，点光 | Single | 86 KB / 72、49 KB / 63 | R2 |
-| 普通，方向光 | Single | 75 KB / 70、44 KB / 64 | R2 |
-| 普通，点光 | Simple | 24 KB / 48、12 KB / 48 | R2 |
-| 普通，方向光 | Simple | 14 KB / 46、6 KB / 36 | R2 |
-
-- 168 个寄存器：Ada 每个 SM 有 65536 个寄存器，一个 warp 需要 32 × 168 = 5376 个，最多驻留 12 个 warp（上限 48），理论占用率约 25%。这是 4.5 节寄存器受限的直接原因。
-- 约 300 KB 代码，远超指令缓存，对应 4.4 节约 23% 的 No Instruction。
-- 10-19（R1 等价代码）与 R2 的神经排列代码块大小和寄存器数几乎一样，说明 R2 的融合没有改变寄存器分配；R3 去掉 fp32 核也没有改善耗时。寄存器和代码体积更可能来自 fp16 核本身完全展开、内联进 `DeferredLightPixelMain`。
-
-### 4.7 可信度
-
-| 结论 | 依据 | 可信度 |
-|---|---|---|
-| 神经光照是 Complex Special tile 的两个排列 | 有无对照中出现或消失 | 高 |
-| 神经光照的占用率受寄存器限制，寄存器受限周期约 2.4 倍 | 三盏灯有无对照一致；168 寄存器 | 高 |
-| 基线 Substrate 光照本身也受寄存器限制 | 不含神经时点光 72–93% | 高 |
-| 该视角下神经物体光照开销约 0.44–0.49 ms | 单帧范围差值 | 中 |
-| 算术吞吐受限 | Math Pipe Throttle + Not Selected 约 35%；R1 减少指令数确实有效 | 中高 |
-| 取指是重要停顿 | No Instruction 约 23%；但 R4 缩小一层代码没有收益 | 中 |
-| 常量读取不是主瓶颈 | Short Scoreboard 12–14%（还包含 `exp` 等 SFU 等待） | 中 |
-
-## 5. 被推翻的判断与经验
-
-被推翻的判断（都是靠对照实验发现的）：
-
-1. **M1：「常量读取是主要瓶颈」**。GPU Trace 显示常量读取等 MIO 等待只占 12–14%。
-2. **把占用最高的 `0xba48…` 当成神经排列**。有无对照显示它是普通 Substrate 排列，基于它的停顿分析作废。
-3. **「98% 寄存器受限」归因到神经核**。基线已有 72–93%，真正的差异在绝对周期数。
-4. **「不执行的 fp32 分支决定寄存器数」**。R3 去掉它们后耗时没有改善。
+另外两条（常量读取是主要瓶颈、不执行的 fp32 分支决定寄存器数）和后续里程碑推翻的判断一起列在 [里程碑总览](/projects/neural-bsdf-perf/milestones/)。
 
 经验：
 
-- **先验证测量工具本身**。M1 的数字受空闲时钟、锁屏、编辑器后台限帧和分辨率影响，R0 之后才可信。
+- **先验证测量工具本身。** M1 的数字受空闲时钟、锁屏、后台限帧和分辨率影响，R0 之后才可信。
 - **结论建立在对照差值上**：同一相机、只改一个变量；同一时段做 A-B-A；用不受改动影响的材质作对照。
-- **记录被测的代码版本**：2026-10-19 的 trace 实际运行的是工作区中未提交的 fp16 核。
-- **profiler 指出的问题不等于局部改动就会变快**。R1 减少了指令数，有效；R2–R4 针对寄存器和代码体积的局部改动都没有收益，因为寄存器分配没有降下来。
+- **记录被测的代码版本。** 一份 trace 实际运行的是工作区中未提交的 fp16 核。
+- **profiler 指出的问题不等于局部改动就会变快。** R1 减少了指令数，有效；R2–R4 针对寄存器和代码体积的局部改动都没有收益，因为寄存器分配没有降下来。
 
-## 6. 下一步
+下一步：
 
 | 方向 | 依据 | 状态 |
 |---|---|---|
-| 把神经求值从 `DeferredLightPixelMain` 拆出来：base pass 写逐像素特征，光照只跑方向相关部分；神经 BSDF 单独一次绘制 | M2 已做。逐像素特征使逐灯光照快 11%；单独绘制更慢：去掉神经核的常规 shader 仍需约 162 寄存器，只含神经核的 shader 反而要 212–218 个，第二次绘制还有固定成本（[M2 报告](/projects/neural-bsdf-perf/milestones/m2-storage-decoupling/) 第 4 节） | 完成，拆分默认关闭 |
-| 降寄存器：激活值用 `half2` 存储、`dot2add` 打包乘加 | M5 已做：方向光着色器寄存器 214 → 168、占用率 +40%，但神经 latent 慢 7%（16 位解包与转换增加了指令），glint 像素快 4–7%（[M5 报告](/projects/neural-bsdf-perf/milestones/m5-advanced/) 第 2 节） | 完成，默认关闭（`r.NeuralBSDF.Real16`） |
+| 把神经求值拆成独立绘制 | M2：逐像素特征使逐灯光照快 11%；单独绘制更慢，去掉神经核的常规 shader 仍需约 162 寄存器，只含神经核的 shader 反而要 212–218 个（[M2 报告](/projects/neural-bsdf-perf/milestones/m2-storage-decoupling/)） | 完成，拆分默认关闭 |
+| 降寄存器：激活值用 `half2` 存储、`dot2add` 打包乘加 | M5：方向光着色器寄存器 214 → 168、占用率 +40%，但神经 latent 慢 7%，glint 像素快 4–7%（[M5 报告](/projects/neural-bsdf-perf/milestones/m5-advanced/)） | 完成，默认关闭 |
 | 第一层拆分：与光源无关的 `wo` 与潜特征部分每像素只算一次 | 减少每盏灯的重复计算；逐灯 pass 下需要跨灯缓存，更适合聚簇或批量光照 | 待评估 |
-| tensor core（cooperative vector，现为 SM 6.10 LinAlg） | 把乘加移出 FMA 管线；cooperative vector 已弃用，LinAlg 只有预览版 Agility SDK / DXC，本引擎不可用（[M5 报告](/projects/neural-bsdf-perf/milestones/m5-advanced/) 第 3 节） | 需要升级 SDK，宜在独立分支试验 |
-
-每一步的验证：`BenchmarkMaterialShading` 的 A-B-A 绝对耗时，GPU Trace 的寄存器数、寄存器受限周期和 Lights 差值，`compare_captures.py` 的数值误差。
-
-## 7. 复现资料
-
-| 内容 | 位置 |
-|---|---|
-| 基准报告 | 插件 `Saved/Benchmarks/Shading/`：`M1_*`、`R1_A1_*`、`R1_M1_*`、`R1_A2_*`、`AB_R1a_*`、`AB_R2_*`、`AB_R1b_*`、`AB3_*`、`AB4_*` |
-| 捕获 | 插件 `Saved/Capture/`：`OPBR_Neural_M1`、`QTP_After`、`OPBR_Teacher`、`R1Packed_*`、`R1_M1_*`、`R2_*`、`R3_*`、`R4_*` |
-| GPU Trace：含神经 / 不含神经（10-19，fp16 核） | `<项目目录>\Saved\NsightTraces\with_neural\`、`no_neural\`（3 帧原始导出）、`no_neural_f1\`（第 1 帧单列，供 MCP 读取）；本地数据，不随站点发布 |
-| GPU Trace：R2 代码，寄存器数 | `<项目目录>\Saved\NsightTraces\R4fg\`；本地数据，不随站点发布 |
-| R3 / R4 未合入的 shader | 本报告 3.6、3.7 节有完整描述；当时的文件副本只在会话临时目录中，未保留 |
+| tensor core（cooperative vector，现为 SM 6.10 LinAlg） | 把乘加移出 FMA 管线；LinAlg 只有预览版 SDK，本引擎不可用（[M5 报告](/projects/neural-bsdf-perf/milestones/m5-advanced/)） | 需要升级 SDK，宜在独立分支试验 |

@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 58
+order: 55
 side_title: 随机访问纹理压缩
 mermaid: true
 ---
