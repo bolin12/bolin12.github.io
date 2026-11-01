@@ -1,16 +1,27 @@
-# 个人主页(私有源码 + 公开成品)
+# 个人主页（GitHub Pages）
 
-这个仓库是**私有**的,里面有批注、待补清单、草稿和 LaTeX。公开的只有构建好的网站,由 Actions 推到公开仓库 `bolin12/bolin12.github.io`。
+站点：https://bolin12.github.io 。这个仓库是**公开**的，GitHub 自己用 Jekyll 构建并发布，推送 `main` 就上线。
+
+## 内容在哪
+| 内容 | 位置 |
+|---|---|
+| 简历（中文，唯一内容来源） | `_data/resume.yml`；英文版 `_data/resume_en.yml`（改完中文后再补齐）；网页模板 `_includes/resume.html` |
+| 项目页与子页 | `projects/`；子页用 front matter 的 `parent` 挂到项目下，目录侧栏自动生成（`order` 排序，`side_title` 是目录里的短名字） |
+| 项目卡片（项目总览、首页） | `_data/projects.yml` |
+| 个人页、首页 | `me.md`、`index.md`；姓名与定位在 `_config.yml` |
+| 顶部导航 | `_data/nav.yml` |
+| 草稿（线上排除，本地预览可见） | `drafts/` |
+| LaTeX 简历 | `resume/`（`main.tex`、`main_en.tex` 由 CI 自动生成，不要手改） |
+
+## 项目的进展与开发文档
+**项目的进展和开发文档写在这里**（`projects/` 下的页面），不再放本地的 `Doc` 目录。还没准备好公开的先放 `drafts/`，本地预览能看到、线上看不到。站点是公开的，所以发布前要先过一遍：去掉本机路径、私有提交哈希、第三方或公司内部的资产与数据；状态要如实（规划就写规划，不写没做出来的结果）。
 
 ## 日常
-- 改简历:只改 `_data/resume.yml`(中文)。英文版 `_data/resume_en.yml` 在你改完中文后让 Claude 补齐。
-- 批注与待补:源码里的 `# TODO(补充)`、`note:` 字段和项目页里的 `{% comment %}` 块,**公开站点永远不会显示**。
-  所有待补项汇总在 `NOTES.md`(自动生成)。
-- 想看带批注的完整页面:到 Actions 里最近一次 "Build and publish the site",下载产物 `site-preview-with-notes`,解压后用本地服务器打开。
-- 推送后 Actions 会:构建公开版 → 安全检查(发现批注、草稿、手机号、源码文件就让构建失败)→ 推送到公开仓库。
+- **本地预览（带批注和草稿）**：`powershell -File scripts\preview.ps1`，打开 http://localhost:4000 。需要装 Ruby，依赖在 `vendor/bundle`。同时会生成 `NOTES.md`（待补清单，已加入 `.gitignore`）。
+- **批注与待补**：`_data/resume.yml` 里的 `# TODO(补充)`、`note:` 字段，以及项目页里的 `{% comment %}` 块，**网站上不会显示**（`show_notes: false`），但因为仓库是公开的，GitHub 上能读到源码。
+- **推送前**：构建一遍，跑 `python scripts/check_public_output.py _site .`，并扫一遍全部历史里有没有手机号和明文邮箱。推送后 Actions 会做同样的构建与检查，只告警、不拦截发布。
+- **写文件不要带 BOM**：Windows PowerShell 的 `Set-Content -Encoding utf8` 会加 BOM，Jekyll 因此会把源文件原样发布出去。
+- 表格和列表前面要留一个空行，否则 Markdown 引擎不渲染。
 
 ## 要 PDF
-把 `resume/` 里的 `main.tex` 和 `resume.cls`(英文版只要 `main_en.tex`)放进 Overleaf 编译;手机号在 Overleaf 里自己加,不要写进仓库。
-
-## 前置设置(只需一次)
-私有仓库的 Settings → Secrets and variables → Actions 里添加 `PUBLIC_REPO_TOKEN`:一个只对公开仓库有 Contents 读写权限的 fine-grained token。未设置时只构建和检查,不发布。
+把 `resume/` 里的 `main.tex` 和 `resume.cls`（英文版只要 `main_en.tex`）放进 Overleaf 编译。联系电话不放进仓库、网站和公开的 PDF，需要时在 Overleaf 里自己加。
