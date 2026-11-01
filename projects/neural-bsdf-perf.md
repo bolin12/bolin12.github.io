@@ -30,10 +30,9 @@ side_title: 神经材质
 |---|---|---|
 | 设计与规划 | [系统架构](/projects/neural-bsdf-perf/architecture/) | 当前系统：模块、BSDF 契约、图集、Substrate 接入、求值器、命令与限制 |
 | | [路线图](/projects/neural-bsdf-perf/roadmap/) | 定位、目标架构、M0–M5 计划与状态、展示计划 |
-| 里程碑 | [里程碑总览](/projects/neural-bsdf-perf/milestones/) | M2–M5 的一览，以及被推翻的判断和项目现在的位置 |
-| | M2 / M3 / M4 / M5 | 各里程碑的独立报告，见左侧目录 |
-| 性能 | [性能报告](/projects/neural-bsdf-perf/performance/) | 结论、各轮结果、瓶颈分析、下一步 |
-| | [GPU Trace 手册](/projects/neural-bsdf-perf/gpu-trace-guide/) | 工具、基准、录与读 GPU Trace |
+| 里程碑 | [里程碑总览](/projects/neural-bsdf-perf/milestones/) | M1–M5 的一览，以及被推翻的判断和项目现在的位置 |
+| | [M1 性能报告](/projects/neural-bsdf-perf/performance/) · M2 / M3 / M4 / M5 | 各里程碑的独立报告；M1 同时是全项目性能数据的汇总 |
+| 测量方法 | [GPU Trace 手册](/projects/neural-bsdf-perf/gpu-trace-guide/) | 工具、基准、录与读 GPU Trace |
 | | [基准与回归](/projects/neural-bsdf-perf/benchmark/) | 固定环境的基准、190 份历史报告归档、回归检查 |
 | | [捕获与对比](/projects/neural-bsdf-perf/capture-and-comparison/) | 教师材质、引擎内捕获、训练、同路径对比 |
 | 调研 | [全景与研究路线](/projects/neural-bsdf-perf/research/) | 游戏引擎各模块的神经技术地图、材质与光照边界、阅读顺序 |
@@ -51,7 +50,7 @@ side_title: 神经材质
 | 怎么自己测一遍、怎么读 Nsight | [GPU Trace 手册](/projects/neural-bsdf-perf/gpu-trace-guide/) |
 | 神经材质怎样接进 UE 的渲染、光照怎样作用于它 | [系统架构](/projects/neural-bsdf-perf/architecture/) |
 | 误差怎么测、和教师差多少 | [捕获与对比](/projects/neural-bsdf-perf/capture-and-comparison/) |
-| M2–M5 做了什么、测到什么、项目现在在哪 | [里程碑报告一览](/projects/neural-bsdf-perf/milestones/) |
+| M1–M5 做了什么、测到什么、项目现在在哪 | [里程碑报告一览](/projects/neural-bsdf-perf/milestones/) |
 | 接下来做什么、展示哪些 demo | [路线图](/projects/neural-bsdf-perf/roadmap/) |
 | 某篇论文讲了什么 | [逐篇解析索引](/projects/neural-bsdf-perf/papers/) |
 | 衍射、结构色能否神经化；Zorah / NvRTX 有没有神经材质 | [神经外观与波动光学](/projects/neural-bsdf-perf/wave-optics/) |

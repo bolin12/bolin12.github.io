@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 里程碑
-order: 14
+order: 15
 side_title: M5 进阶
 ---
 更新：2026-10-23。本文回答：路线图 M5 的三项（cooperative vector / tensor core、NTC 压缩潜纹理、更多材质类型）在这台机器和这个引擎版本上能做到哪一步；做了哪个实验、结果如何。

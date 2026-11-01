@@ -1,16 +1,16 @@
 ---
 layout: page
-title: "神经 BSDF 性能报告"
+title: "M1 报告：求值器优化与性能分析"
 permalink: /projects/neural-bsdf-perf/performance/
 body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 性能
-order: 20
-side_title: 性能报告
+group: 里程碑
+order: 11
+side_title: M1 求值器与瓶颈
 ---
-更新：2026-11-01（数据截至 2026-10-21）。本文回答：神经 BSDF 在 Substrate 延迟光照中的性能——测到了什么、为什么慢、改了什么、下一步做什么。
+更新：2026-11-01（数据截至 2026-10-21）。这是 M1（求值器优化）的报告，也是全项目性能数据的汇总。本文回答：神经 BSDF 在 Substrate 延迟光照中的性能——测到了什么、为什么慢、改了什么。M2–M5 的结果和整体判断见 [里程碑总览](/projects/neural-bsdf-perf/milestones/)。
 
 测试平台：RTX 4060 笔记本（Ada，功耗上限 130 W），UE 5.8.3，D3D12，Adaptive GBuffer + glint。
 
@@ -24,7 +24,7 @@ side_title: 性能报告
 | 对比场景中的开销 | 神经物体使编辑器帧的 Lights 增加 0.49 ms |
 | 主要瓶颈 | 神经光照排列每线程 168 个寄存器，最多驻留 12 个 warp（理论占用率约 25%）；已驻留的 warp 以取指等待（约 23%）和数学管线饱和（约 35%）为主 |
 | 已验证无效 | 减少同时存活的激活值（R2）、去掉不执行的 fp32 核（R3）、缩小融合层代码（R4）：都没有可测收益 |
-| 下一步 | 拆成独立绘制已在 M2 实测更慢；方向改为降低神经核本身的寄存器、减少按灯重复的计算（第 5 节） |
+| 后续 | 拆成独立绘制（M2）和降寄存器（M5）都已实测不划算，见 [里程碑总览](/projects/neural-bsdf-perf/milestones/) |
 
 ## 2. 测量方法
 
@@ -123,7 +123,7 @@ Ada 每个 SM 有 65536 个寄存器，一个 warp 需要 32 × 168 = 5376 个�
 | 取指是重要停顿（但 R4 缩小一层代码没有收益） | 中 |
 | 常量读取不是主瓶颈 | 中 |
 
-## 5. 经验与下一步
+## 5. 经验
 
 分析途中被对照实验推翻的判断：
 
@@ -139,11 +139,4 @@ Ada 每个 SM 有 65536 个寄存器，一个 warp 需要 32 × 168 = 5376 个�
 - **记录被测的代码版本。** 一份 trace 实际运行的是工作区中未提交的 fp16 核。
 - **profiler 指出的问题不等于局部改动就会变快。** R1 减少了指令数，有效；R2–R4 针对寄存器和代码体积的局部改动都没有收益，因为寄存器分配没有降下来。
 
-下一步：
-
-| 方向 | 依据 | 状态 |
-|---|---|---|
-| 把神经求值拆成独立绘制 | M2：逐像素特征使逐灯光照快 11%；单独绘制更慢，去掉神经核的常规 shader 仍需约 162 寄存器，只含神经核的 shader 反而要 212–218 个（[M2 报告](/projects/neural-bsdf-perf/milestones/m2-storage-decoupling/)） | 完成，拆分默认关闭 |
-| 降寄存器：激活值用 `half2` 存储、`dot2add` 打包乘加 | M5：方向光着色器寄存器 214 → 168、占用率 +40%，但神经 latent 慢 7%，glint 像素快 4–7%（[M5 报告](/projects/neural-bsdf-perf/milestones/m5-advanced/)） | 完成，默认关闭 |
-| 第一层拆分：与光源无关的 `wo` 与潜特征部分每像素只算一次 | 减少每盏灯的重复计算；逐灯 pass 下需要跨灯缓存，更适合聚簇或批量光照 | 待评估 |
-| tensor core（cooperative vector，现为 SM 6.10 LinAlg） | 把乘加移出 FMA 管线；LinAlg 只有预览版 SDK，本引擎不可用（[M5 报告](/projects/neural-bsdf-perf/milestones/m5-advanced/)） | 需要升级 SDK，宜在独立分支试验 |
+下一步：M2 已实测拆分独立绘制更慢，M5 已实测降寄存器反而更慢，剩下的是 tensor core 与 M3 第二轮的价值验证，见 [里程碑总览](/projects/neural-bsdf-perf/milestones/) 第 3 节。

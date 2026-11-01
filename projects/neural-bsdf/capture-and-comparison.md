@@ -6,8 +6,8 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 性能
-order: 23
+group: 测量方法
+order: 22
 side_title: 捕获与对比
 ---
 更新：2026-10-22（初稿 2026-10-18）。本文回答：神经材质的误差怎样公平地测——教师数据和对比参考都来自 Substrate 延迟光照实际渲染出的结果，而不是一份手写的解析近似；以及 OpenPBR 教师的结果。

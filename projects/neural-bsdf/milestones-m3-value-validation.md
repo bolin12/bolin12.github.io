@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 里程碑
-order: 12
+order: 13
 side_title: M3 价值验证
 ---
 更新：2026-10-23。本文回答：神经材质相对“完整 Substrate”和“简化版”是否值得——误差、耗时、着色器、内存四个方面——用已有的 OpenPBR 教师测出的结果，以及这对项目方向意味着什么。路线图原计划用 Fab 的 Automotive Substrate Materials；资产尚未加入 Demo 工程，所以本轮先在 OpenPBR 教师上搭好并跑通整套流程，第二轮换真实材质时只需更换教师。

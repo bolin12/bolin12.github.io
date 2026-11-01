@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 里程碑
-order: 13
+order: 14
 side_title: M4 间接光代理
 ---
 更新：2026-10-23。本文回答：路线图 M4（让 Lumen GI、Lumen 反射和天光看到的材质与神经直接光一致）怎么做、效果如何、还差什么。

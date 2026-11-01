@@ -6,8 +6,8 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 性能
-order: 22
+group: 测量方法
+order: 21
 side_title: 基准与回归
 ---
 神经材质接入 UE 后，用一套固定环境的基准和回归检查来比较不同实现的 GPU 开销。本页是这套体系的总结；各轮结果与瓶颈分析见[性能报告](/projects/neural-bsdf-perf/performance/)，录制与读 Trace 的方法见 [GPU Trace 手册](/projects/neural-bsdf-perf/gpu-trace-guide/)。

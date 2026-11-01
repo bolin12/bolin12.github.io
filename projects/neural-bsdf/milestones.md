@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "里程碑报告（M2–M5）"
+title: "里程碑报告（M1–M5）"
 permalink: /projects/neural-bsdf-perf/milestones/
 body_class: resume
 nav: projects
@@ -10,13 +10,14 @@ group: 里程碑
 order: 10
 side_title: 里程碑总览
 ---
-更新：2026-10-23。本文回答：路线图 M2–M5 各做了什么、结论是什么、整体上项目现在处在什么位置、下一步该做什么。每个里程碑的设计、数据和推理在各自的报告里。
+更新：2026-10-23。本文回答：路线图 M1–M5 各做了什么、结论是什么、整体上项目现在处在什么位置、下一步该做什么。每个里程碑的设计、数据和推理在各自的报告里。
 
 
 ## 1. 一览
 
 | 里程碑 | 判断标准 | 结果 | 报告 |
 |---|---|---|---|
+| M1 求值器优化 | 神经部分耗时降至基线的十分之一以下 | 达成：旧计时下 latent 108.8 → 18.8 ms、QTP 187.5 → 40.0 ms；修正计时后 2048² 下 latent 约 16 ms、QTP 约 12.5 ms，完整 OpenPBR 约 8 ms；瓶颈是 168 寄存器 / 线程导致的低占用率 | [M1](/projects/neural-bsdf-perf/performance/) |
 | M2 存储解耦 | 普通材质性能不受影响；关闭 glint 后神经材质照常工作 | 独立标志与逐像素数据，不需要 glint（关闭后逐像素一致）；逐灯光照快 11%。拆成独立光照绘制实测更慢，默认关闭 | [M2](/projects/neural-bsdf-perf/milestones/m2-storage-decoupling/) |
 | M3 价值验证（第一轮，OpenPBR 教师） | 神经版误差明显低于简化版，耗时低于完整版 | 两项都未达成：最优单 Slab 9.8% 对神经 11.8%；神经 15.1 ms 对完整 OpenPBR 7.7 ms。第二轮需要 Automotive 资产 | [M3](/projects/neural-bsdf-perf/milestones/m3-value-validation/) |
 | M4 间接光 | 开启 Lumen 时金属与清漆外观基本一致 | 达成：逐 texel 拟合代理，只有天光时误差 66.6% → 18.6%，太阳 + 天光 22.2% → 10.5%；清漆锐利反射仍弱 | [M4](/projects/neural-bsdf-perf/milestones/m4-indirect-proxy/) |

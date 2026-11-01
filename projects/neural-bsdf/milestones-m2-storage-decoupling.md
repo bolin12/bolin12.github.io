@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 里程碑
-order: 11
+order: 12
 side_title: M2 存储解耦
 mermaid: true
 ---

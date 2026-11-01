@@ -6,8 +6,8 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 性能
-order: 21
+group: 测量方法
+order: 20
 side_title: GPU Trace 手册
 ---
 更新：2026-11-01。本文回答：怎么在本项目里测神经 BSDF 的性能——环境设置、跑基准、录 GPU Trace、读 GPU Trace 的关键几步。界面逐项介绍、第三方工具的编译细节这类内容不在这里展开，以 Nsight 官方文档为准。
