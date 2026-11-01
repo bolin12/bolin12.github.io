@@ -1,4 +1,4 @@
-﻿- name: 神经材质(Neural BSDF)在 UE 的适配与优化
+- name: 神经材质(Neural BSDF)在 UE 的适配与优化
   desc: 将神经材质接入 Unreal Engine 并做性能优化,配套可复现的 GPU 基准、基线与回归检查。
   url: /projects/neural-bsdf-perf/
   tags: [Unreal Engine, GPU, Benchmark]

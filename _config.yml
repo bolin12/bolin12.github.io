@@ -1,4 +1,4 @@
-﻿title: Bolin
+title: Bolin
 description: 图形渲染与 GPU 优化的个人博客与简历
 # 推送前把下面两行改成你的信息;仓库名为 <用户名>.github.io 时 url 填 https://<用户名>.github.io,baseurl 留空
 url: "https://bolin12.github.io"
@@ -19,8 +19,19 @@ header_pages:
   - resume.md
   - about.md
 show_excerpts: true
+# Authoring notes are hidden on the published site. The local preview (scripts/preview.ps1) turns them on
+# through _config_local.yml.
+show_notes: false
 exclude:
   - resume/
   - scripts/
   - README.md
+  - NOTES.md
+  - vendor/
+  - .bundle/
+  - Gemfile
+  - Gemfile.lock
+  - _site_local/
+  - _site_public/
+  - _site_preview/
 

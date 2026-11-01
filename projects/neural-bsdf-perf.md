@@ -1,4 +1,4 @@
-﻿---
+---
 layout: page
 title: 神经材质 GPU 性能基准与回归体系
 permalink: /projects/neural-bsdf-perf/

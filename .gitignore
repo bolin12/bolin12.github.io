@@ -1,4 +1,4 @@
-﻿_site/
+_site/
 .jekyll-cache/
 .sass-cache/
 Gemfile.lock
@@ -11,3 +11,14 @@ resume/*.fls
 resume/*.fdb_latexmk
 resume/*.pdf
 resume/private.tex
+_site_public/
+_site_preview/
+public_repo/
+vendor/
+.bundle/
+NOTES.md
+_site/
+_site_local/
+
+__pycache__/
+*.pyc

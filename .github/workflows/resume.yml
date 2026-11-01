@@ -1,17 +1,23 @@
-name: Resume tex
+name: Site check and resume tex
 
-# Only runs when the resume sources change. No PDF is built here: copy resume/ into Overleaf
-# (main.tex + resume.cls for Chinese, main_en.tex for English) and compile it there.
+# GitHub Pages builds and publishes the site by itself. This workflow does two extra things when the resume
+# or the pages change:
+#   check     builds the site the way Pages does and fails if anything private (notes, to-dos, drafts,
+#             contact details, source files) ended up in the output
+#   generate  regenerates resume/main.tex and resume/main_en.tex. No PDF is built here: copy resume/ into
+#             Overleaf (main.tex + resume.cls for Chinese, main_en.tex for English) and compile it there.
 on:
   push:
     branches: [main]
     paths:
-      - _data/resume.yml
-      - _data/resume_en.yml
-      - resume.md
-      - en/resume.md
-      - _includes/resume.html
-      - scripts/build_resume.py
+      - _data/**
+      - _includes/**
+      - _layouts/**
+      - _config*.yml
+      - "*.md"
+      - en/**
+      - projects/**
+      - scripts/**
       - .github/workflows/resume.yml
   workflow_dispatch:
 
@@ -19,8 +25,7 @@ permissions:
   contents: write
 
 jobs:
-  site:
-    # Catches Liquid/YAML mistakes before GitHub Pages builds the same sources.
+  check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,8 +34,9 @@ jobs:
           ruby-version: "3.2"
       - run: bundle install
       - run: bundle exec jekyll build
+      - run: python3 scripts/check_public_output.py _site .
 
-  tex:
+  generate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +47,7 @@ jobs:
       # No phone number here: the repository is public.
       - run: python scripts/build_resume.py --lang zh
       - run: python scripts/build_resume.py --lang en
-      - name: Commit the generated .tex files if they changed
+      - name: Commit the generated files if they changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

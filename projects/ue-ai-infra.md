@@ -1,4 +1,4 @@
-﻿---
+---
 layout: page
 title: AI 辅助的 UE 研发与排障体系
 permalink: /projects/ue-ai-infra/
