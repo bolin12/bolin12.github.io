@@ -39,17 +39,17 @@ sections:
 
   - title: Projects
     items:
-      - title: GPU Benchmark and Regression Framework for Neural Materials
-        date: Oct 2026 – Present
-        points:
-          - text: Fixed the rendering setup and used batched timing; sampled GPU clocks with nvidia-smi to flag downclocked runs; archived 190 reports covering 33 experiments at 2048px and 4 measurement protocols.
-          - text: Found and handled two kinds of results that cannot be compared directly - different measurement protocols (about 109 ms at 1024px with per-frame timing versus about 17 ms at 2048px with batched timing) and session drift (an unchanged control material varied by about 15%, between 7.7 and 8.8 ms); regression checks now use the cost ratio to the control material.
-          - text: Pinned a baseline with a 5% tolerance check that returns a non-zero exit code on regression, so it can run in CI; an artificial 15% slowdown was detected as +14.0%.
-
       - title: Neural Material (Neural BSDF) Integration and Optimization in UE
         date: Jun 2026 – Present
         points:
-          - text: Integrated neural materials into Unreal Engine and optimized their performance.
+          - label: Integration and optimization
+            text: Integrated neural materials into Unreal Engine and optimized their performance.
+          - label: Benchmarking and archiving
+            text: Fixed the rendering setup and used batched timing; sampled GPU clocks with nvidia-smi to flag downclocked runs; archived 190 reports covering 33 experiments at 2048px and 4 measurement protocols.
+          - label: Comparability
+            text: Found and handled two kinds of results that cannot be compared directly - different measurement protocols (about 109 ms at 1024px with per-frame timing versus about 17 ms at 2048px with batched timing) and session drift (an unchanged control material varied by about 15%, between 7.7 and 8.8 ms); regression checks now use the cost ratio to the control material.
+          - label: Regression checks
+            text: Pinned a baseline with a 5% tolerance check that returns a non-zero exit code on regression, so it can run in CI; an artificial 15% slowdown was detected as +14.0%.
 
       - title: Stateless Vulkan Layer Features
         date: Jul 2026 – Present

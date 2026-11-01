@@ -1,11 +1,7 @@
-﻿- name: 神经材质 GPU 性能基准与回归体系
-  desc: 为 Unreal Engine 中的 Neural BSDF 建立可复现的 GPU 基准、基线与回归检查。
+﻿- name: 神经材质(Neural BSDF)在 UE 的适配与优化
+  desc: 将神经材质接入 Unreal Engine 并做性能优化,配套可复现的 GPU 基准、基线与回归检查。
   url: /projects/neural-bsdf-perf/
   tags: [Unreal Engine, GPU, Benchmark]
-- name: 神经材质(Neural BSDF)在 UE 的适配
-  desc: 将神经材质接入 Unreal Engine Substrate,研究 GPU 推理开销与实时渲染的取舍。(待补充)
-  url: https://github.com/bolin12
-  tags: [Unreal Engine, HLSL]
 - name: 无状态 Vulkan 层
   desc: 在 UE VulkanRHI 中实现 NoGraphicsAPI 风格的公共 Root 地址参数模型。(待补充)
   url: https://github.com/bolin12
