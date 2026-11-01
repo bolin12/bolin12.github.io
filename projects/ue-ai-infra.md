@@ -5,7 +5,7 @@ permalink: /projects/ue-ai-infra/
 body_class: resume
 ---
 {% comment %}
-  TODO(补充) —— 这个页面还是骨架。下面的 HTML 注释是待补内容，网页上看不到；补完后把对应注释换成正文。
+  TODO(补充) —— 这个页面还是骨架。下面的 comment 块是待补内容，网页和页面源码里都看不到；补完后把对应块换成正文。
   若涉及公司内部的工具或数据，公开前请确认保密要求，不要放内部代码、截图和未公开的数据。
 {% endcomment %}
 
