@@ -3,6 +3,7 @@ layout: page
 title: 简历
 permalink: /resume/
 body_class: resume
+hide_title: true
 ---
 [下载 PDF 版]({{ "/assets/resume.pdf" | relative_url }}) （PDF 尚未生成，用 Overleaf 编译后放到 assets/resume.pdf）
 
