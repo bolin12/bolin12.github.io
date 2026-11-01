@@ -4,6 +4,7 @@ title: AI 原生游戏：生成、验证与自动调试
 permalink: /projects/ai-native-game/
 body_class: resume
 nav: projects
+side_title: AI 原生游戏
 ---
 <p><span class="badge">进行中</span> 底座（排障体系）已经有了；面向游戏的生成与自动验证<strong>尚未开始实现</strong>。这一页记录我想搭的流程、从参考项目读到的设计要点，以及分阶段的目标，随进展更新。</p>
 

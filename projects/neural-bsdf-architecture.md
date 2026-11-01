@@ -6,6 +6,7 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
+order: 1
 ---
 更新：2026-10-23（对应 M2）。本文回答：现在这套神经 BSDF 系统由哪些部分组成、数据怎样流动、和 UE 光照怎样衔接、有哪些限制。性能见[性能报告]({{ '/projects/neural-bsdf-perf/performance/' | relative_url }})，计划与里程碑见[路线图]({{ '/projects/neural-bsdf-perf/roadmap/' | relative_url }})。
 

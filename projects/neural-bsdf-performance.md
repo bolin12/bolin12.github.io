@@ -6,6 +6,7 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
+order: 2
 ---
 更新：2026-10-21。本文回答：神经 BSDF 在 Substrate 延迟光照中的性能——测到了什么、为什么慢、改了什么、下一步做什么。方法见 [GPU Trace 方法手册]({{ '/projects/neural-bsdf-perf/gpu-trace-guide/' | relative_url }})，系统见[系统架构]({{ '/projects/neural-bsdf-perf/architecture/' | relative_url }})，计划见[路线图]({{ '/projects/neural-bsdf-perf/roadmap/' | relative_url }})。
 

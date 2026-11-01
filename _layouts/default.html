@@ -6,7 +6,18 @@
   {% seo %}
   <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}?v={{ site.time | date: '%s' }}">
 </head>
-<body>
+{% comment %}
+  A page with a `parent`, or with other pages pointing at it, gets a project sidebar listing the root page
+  and its children (sorted by `order`). Nothing to configure: new sub-pages only need `parent: <root url>`.
+{% endcomment %}
+{% assign side_root = "" %}
+{% if page.parent %}
+  {% assign side_root = page.parent %}
+{% else %}
+  {% assign side_kids = site.pages | where: "parent", page.url %}
+  {% if side_kids.size > 0 %}{% assign side_root = page.url %}{% endif %}
+{% endif %}
+<body{% if side_root != "" %} class="wide"{% endif %}>
   <header class="site-header">
     <div class="wrap">
       <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
@@ -18,8 +29,11 @@
       </nav>
     </div>
   </header>
-  <main class="wrap">
-    {{ content }}
+  <main class="wrap{% if side_root != "" %} has-side{% endif %}">
+    {% if side_root != "" %}{% include sidebar.html root=side_root %}{% endif %}
+    <div class="main-col">
+      {{ content }}
+    </div>
   </main>
   <footer class="site-footer">
     <div class="wrap">

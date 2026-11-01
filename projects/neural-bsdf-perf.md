@@ -4,6 +4,7 @@ title: 神经材质 GPU 性能基准与回归体系
 permalink: /projects/neural-bsdf-perf/
 body_class: resume
 nav: projects
+side_title: 神经材质
 ---
 这个项目有一套完整的文档，下面是入口；本页是其中“GPU 基准与回归检查”这一块的总结。
 

@@ -6,6 +6,8 @@ body_class: resume
 nav: projects
 parent: /projects/ai-native-game/
 parent_title: AI 原生游戏
+order: 1
+side_title: 研发与排障体系
 ---
 {% comment %}
   TODO(补充) —— 这个页面还是骨架。下面的 comment 块是待补内容，网页和页面源码里都看不到；补完后把对应块换成正文。

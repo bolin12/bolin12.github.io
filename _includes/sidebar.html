@@ -1,0 +1,11 @@
+{% assign root_page = site.pages | where: "url", include.root | first %}
+{% assign kids = site.pages | where: "parent", include.root | sort: "order" %}
+<nav class="side" aria-label="项目目录">
+  <div class="side-title">{{ root_page.side_title | default: root_page.title }}</div>
+  <ul>
+    <li{% if page.url == root_page.url %} class="cur"{% endif %}><a href="{{ root_page.url | relative_url }}">概览</a></li>
+    {% for k in kids %}
+    <li{% if page.url == k.url %} class="cur"{% endif %}><a href="{{ k.url | relative_url }}">{{ k.side_title | default: k.title }}</a></li>
+    {% endfor %}
+  </ul>
+</nav>
