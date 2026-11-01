@@ -1,0 +1,65 @@
+# English resume: same structure as resume.yml, translated from it.
+# Edit resume.yml (Chinese) first; ask Claude to bring this file up to date afterwards.
+# Authoring notes from the Chinese file are not carried over.
+name: Bolin Li
+email: bolin09511 at gmail dot com
+sections:
+  - title: Education
+    items:
+      - title: University of Chinese Academy of Sciences
+        sub: M.S., Computer Vision & Computer Graphics
+        date: Sep 2022 – Jun 2025
+      - title: Ocean University of China
+        sub: B.S., Electronic Information
+        date: Sep 2018 – Jun 2022
+
+  - title: Experience
+    items:
+      - title: Guangzhou Tencent Technology Co., Ltd.
+        sub: Game Engine Developer
+        date: Jun 2025 – Present
+        points:
+          - label: Rendering features
+            text: Customized Unreal Engine rendering features, including debug views, light shaft occlusion, translucent shadows, and light functions; ported engine plugins and adapted visual quality across platforms.
+          - label: Performance and resource optimization
+            text: Skeletal mesh culling, shader permutation cleanup, offline shadow compression, HLOD unloading, texture downgrading, and spreading asset streaming across frames; separated per-platform assets and materials, managed consistently in the editor and at runtime.
+          - label: Toolchain and stability
+            text: Built debug and statistics tools for triangle counts, pixel cost, and scene resource usage; diagnosed and fixed crashes related to numerical precision, asset import, shader translation, and graphics APIs, using RenderDoc, Unreal Insights, and ProfileGPU to analyze rendering anomalies and performance bottlenecks.
+          - label: AI-assisted R&D infrastructure
+            text: Built AI-assisted development workflows for Unreal Engine (CodeGraph, UE Reviewer, UnrealMCP, TraceMCP, RenderTrail) covering code review, performance analysis, and issue diagnosis; explored closed-loop automated debugging and its adoption in the engine development process.
+
+      - title: Guangzhou Tencent Technology Co., Ltd.
+        sub: Game Engine Developer (Intern)
+        date: Mar 2024 – Sep 2024
+        points:
+          - label: Overdraw debug view on mobile
+            text: Early UE5.0 did not support the Overdraw view on mobile; ported it to mobile to inspect how many shading layers effects produce.
+          - label: Mobile VRS
+            text: Enabled variable rate shading (VRS) to reduce shading cost.
+
+  - title: Projects
+    items:
+      - title: GPU Benchmark and Regression Framework for Neural Materials
+        date: Oct 2026 – Present
+        points:
+          - text: Fixed the rendering setup and used batched timing; sampled GPU clocks with nvidia-smi to flag downclocked runs; archived 190 reports covering 33 experiments at 2048px and 4 measurement protocols.
+          - text: Found and handled two kinds of results that cannot be compared directly - different measurement protocols (about 109 ms at 1024px with per-frame timing versus about 17 ms at 2048px with batched timing) and session drift (an unchanged control material varied by about 15%, between 7.7 and 8.8 ms); regression checks now use the cost ratio to the control material.
+          - text: Pinned a baseline with a 5% tolerance check that returns a non-zero exit code on regression, so it can run in CI; an artificial 15% slowdown was detected as +14.0%.
+
+      - title: Neural Material (Neural BSDF) Integration and Optimization in UE
+        date: Jun 2026 – Present
+        points:
+          - text: Integrated neural materials into Unreal Engine and optimized their performance.
+
+      - title: Stateless Vulkan Layer Features
+        date: Jul 2026 – Present
+        points:
+          - text: Implemented a NoGraphicsAPI-style common root-address parameter model in UE's VulkanRHI while keeping the original renderer and gameplay shaders, and validated real graphics and compute paths, lifetimes, and performance cost against the original.
+
+      - title: Automated Troubleshooting Workflow for UE Development
+        date: Jul 2026 – Present
+        points:
+          - label: Closed loop across logic and visuals
+            text: Runtime intermediate state cannot be fully recorded and log-based approaches require restarting the process. Used Rewind to record the final state of the faulty track, Checkpoints to save key states for iterative replay, and WinDbg to record the faulty flow, giving a semi-automated troubleshooting loop without stopping the game.
+          - label: Structured rendering data
+            text: Rendering bugs involve the RDG and GPU layers; combined RDG and frame-capture data, starting from the anomalous region to locate resource or shader problems, forming a troubleshooting loop on the rendering side.

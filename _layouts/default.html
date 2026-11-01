@@ -11,7 +11,7 @@
   <header class="site-header">
     <div class="wrap">
       <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-      {% if page.show_email %}<span class="header-note">{{ site.data.resume.email }}</span>{% endif %}
+      {% if page.show_email %}<span class="header-note">{{ site.data.resume.email }}{% if page.lang_url %} · <a href="{{ page.lang_url | relative_url }}">{{ page.lang_label }}</a>{% endif %}</span>{% endif %}
       <nav>
         {% for p in site.header_pages %}
           {% assign pg = site.pages | where: "path", p | first %}
