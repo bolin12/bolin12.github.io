@@ -43,3 +43,4 @@ table{border-collapse:collapse}td,th{border:1px solid var(--line);padding:6px 12
 .resume li{margin:0}
 .resume .entry{margin:10px 0 2px}
 .more{font-size:13px;font-weight:400;margin-left:8px}
+.resume-head{font-size:17px;margin:0 0 8px}.note{font-size:.9em}

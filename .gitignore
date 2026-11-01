@@ -3,3 +3,11 @@
 .sass-cache/
 Gemfile.lock
 resume.zip
+resume/*.aux
+resume/*.log
+resume/*.out
+resume/*.xdv
+resume/*.fls
+resume/*.fdb_latexmk
+resume/*.pdf
+resume/private.tex
