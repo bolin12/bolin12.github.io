@@ -1,32 +1,76 @@
-﻿\documentclass[11pt,a4paper]{article}
-\usepackage[margin=2cm]{geometry}
-\usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
-\usepackage{titlesec}
-\pagestyle{empty}
-\setlist{nosep,leftmargin=*}
-\titleformat{\section}{\large\bfseries}{}{0em}{}[\titlerule]
-\titlespacing*{\section}{0pt}{10pt}{6pt}
+﻿% !TeX TS-program = xelatex
+
+\documentclass{resume}
+\ResumeName{李博林}
 
 \begin{document}
 
-\begin{center}
-  {\LARGE\bfseries 你的姓名 Your Name}\\[4pt]
-  your@email.com \,|\, github.com/bolin12 \,|\, https://bolin12.github.io
-\end{center}
+\ResumeContacts{
+REDACTED，%
+\ResumeUrl{mailto:REDACTED}{REDACTED}%
+}
 
-\section*{Education}
-\textbf{University} \hfill 2020 -- 2024\\
-B.S. in Computer Science
+\ResumeTitle
 
-\section*{Experience}
-\textbf{Project / Company} \hfill 2024 -- Present
+\section{教育经历}
+
+\ResumeItem
+{中国科学院大学}
+[\textnormal{硕士|计算机视觉\&计算机图形}]
+[2022.09--2025.06]
+
+\ResumeItem
+{中国海洋大学}
+[\textnormal{本科|电子信息}]
+[2018.09--2022.06]
+
+\section{工作经历}
+
+\ResumeItem
+{腾讯}
+[游戏引擎开发]
+[2025.06--至今]
+
 \begin{itemize}
-  \item Describe what you did and the measurable result.
-  \item GPU profiling and optimization with Nsight Graphics / RenderDoc.
+\item \textbf{渲染特性开发}：负责 Unreal Engine 渲染特性定制，包括调试视图、光束遮蔽、半透明阴影、灯光函数；完成引擎插件移植与多平台画质适配。
+\item \textbf{性能与资源优化}：围绕 CPU/GPU、内存与加载效率做专项优化——骨骼剔除、Shader 变体清理、离线阴影压缩、HLOD 卸载、纹理降级、资源流送分帧；支持多平台资产与材质分离，编辑器与运行时统一管理。
+\item \textbf{研发工具链}：开发模型面数、像素开销、场景资源统计等调试与统计工具。
+\item \textbf{引擎稳定性}：定位并修复数值精度、资产导入、Shader 翻译及图形 API 相关崩溃；结合 RenderDoc、Unreal Insights、ProfileGPU 分析渲染异常与性能瓶颈。
+\item \textbf{AI 研发基建}：参与建设面向 Unreal Engine 的 AI 辅助研发工作流（CodeGraph、UE Reviewer、UnrealMCP、TraceMCP、RenderTrail），探索代码审查、性能分析、问题定位与自动化调试闭环。
 \end{itemize}
 
-\section*{Skills}
-C++, HLSL, Python, Unreal Engine, Vulkan/D3D12
+\ResumeItem
+{腾讯}
+[游戏引擎开发（实习）]
+[2024.03--2024.09]
+
+\begin{itemize}
+\item \textbf{Overdraw 调试视图移植}：UE5.0 早期手机端不支持 Overdraw 视图，将其移植到手机端，用于查看特效着色层数。
+\item \textbf{移动端 VRS}：开启可变着色率（VRS），降低着色压力。
+\end{itemize}
+
+\section{个人项目}
+
+\ResumeItem
+{神经材质（Neural BSDF）在 UE 的适配与优化}[]
+[2026.06--至今]
+\begin{itemize}
+\item 将神经材质接入 Unreal Engine 并做性能优化。
+\end{itemize}
+
+\ResumeItem
+{无状态 Vulkan 层新特性}[]
+[2026.07--至今]
+\begin{itemize}
+\item 在 UE VulkanRHI 中实现 NoGraphicsAPI 风格的公共 Root 地址参数模型，保留原 Renderer 与业务 Shader，完成真实图形／计算路径、生命周期及性能成本对照验证。
+\end{itemize}
+
+\ResumeItem
+{UE 开发自动化排障工作流}[]
+[2026.07--至今]
+\begin{itemize}
+\item \textbf{逻辑与画面层闭环}：运行时中间状态无法全量记录、日志方案需重启进程。用 Rewind 记录异常轨道终态，Checkpoint 保存关键检查点并迭代重放，windbg 记录异常流程，实现不停机的半自动 bug 排查闭环。
+\item \textbf{渲染层数据结构化}：渲染 bug 涉及 RDG 与 GPU 层，综合 RDG 与截帧数据，以异常区域为起点定位资源或 Shader 问题，形成渲染侧排查闭环。
+\end{itemize}
 
 \end{document}
