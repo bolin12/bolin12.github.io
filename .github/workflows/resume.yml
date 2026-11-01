@@ -4,7 +4,7 @@ name: Resume tex
 # (main.tex + resume.cls for Chinese, main_en.tex for English) and compile it there.
 on:
   push:
-    branches: [main, en-resume]
+    branches: [main]
     paths:
       - _data/resume.yml
       - _data/resume_en.yml
