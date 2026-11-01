@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 45
+order: 56
 side_title: Comprehensive 2025
 mermaid: true
 ---

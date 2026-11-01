@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 44
+order: 55
 side_title: Taming 补充材料
 mermaid: true
 ---

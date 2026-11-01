@@ -6,12 +6,14 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 研究
-order: 31
-side_title: 波动光学
+group: 调研
+order: 41
+side_title: 波动光学（调研）
 mermaid: true
 ---
-﻿# 神经外观与波动光学
+# 神经外观与波动光学
+
+> **性质：调研，项目未涉及。** 本项目的教师是 OpenPBR / Substrate（几何光学），没有实现任何波动光学效果，也没有相关结果。本页只回答“能不能做、边界在哪”，是路线图里“可选展示项”的依据，尚未开始实现。
 
 更新：2026-10-22（初稿 2026-10-17）。本文回答：衍射、干涉、薄膜、结构色这类波动光学外观，能否用神经外观做实时代理，边界在哪里；以及本地 NvRTX / Zorah 工程和这件事的关系。波动光学在 [路线图](/projects/neural-bsdf-perf/roadmap/) 中是运行时成熟后的可选展示项，不是主线。
 

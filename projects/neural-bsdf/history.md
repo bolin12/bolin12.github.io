@@ -6,8 +6,8 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 项目
-order: 4
+group: 规划
+order: 32
 side_title: 项目历程
 ---
 更新：2026-10-22。本文回答：这个项目按什么顺序做到了现在，每一步的结果和当时的判断是什么。当前系统见 [系统架构](/projects/neural-bsdf-perf/architecture/)；早期文档中已过时的计划归档在第 3 节。

@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 42
+order: 53
 side_title: Bridging 幻灯片
 mermaid: true
 ---

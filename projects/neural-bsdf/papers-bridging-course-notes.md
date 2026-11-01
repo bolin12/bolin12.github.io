@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 41
+order: 52
 side_title: Bridging 课程讲义
 mermaid: true
 ---

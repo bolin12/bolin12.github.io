@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 46
+order: 57
 side_title: Comprehensive 补充材料
 mermaid: true
 ---

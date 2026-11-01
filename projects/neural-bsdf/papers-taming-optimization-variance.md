@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 43
+order: 54
 side_title: Taming 2026
 mermaid: true
 ---

@@ -1,66 +1,63 @@
 ---
 layout: page
-title: 神经材质 GPU 性能基准与回归体系
+title: "UE 神经外观项目"
 permalink: /projects/neural-bsdf-perf/
 body_class: resume
 nav: projects
 side_title: 神经材质
 ---
-这个项目的全部文档都在这里，左侧目录按主题分组；本页是其中“GPU 基准与回归检查”这一块的总结。从哪里开始读，见[状态与入口](/projects/neural-bsdf-perf/status/)。
+更新：2026-11-01。本页回答：这个项目是什么、做到哪了、文档在哪里、从哪里开始读。
 
-## 文档
+个人项目：在 UE 中做一套以性能为核心、能用于游戏的神经外观（神经材质）系统，并用测量数据证明它比原方案划算。实现与资产在引擎的实验性插件 `NeuralAppearanceLab` 里，一个独立的 UE 项目只作为编辑器宿主；论文 PDF 与研究工程保存在本地，不随站点发布。
 
-- **项目**：[状态与入口](/projects/neural-bsdf-perf/status/) · [系统架构](/projects/neural-bsdf-perf/architecture/) · [路线图](/projects/neural-bsdf-perf/roadmap/) · [项目历程](/projects/neural-bsdf-perf/history/) · [捕获与对比](/projects/neural-bsdf-perf/capture-and-comparison/) · [Demo 计划](/projects/neural-bsdf-perf/demos/)
-- **里程碑**：[总览](/projects/neural-bsdf-perf/milestones/) · [M2 存储解耦](/projects/neural-bsdf-perf/milestones/m2-storage-decoupling/) · [M3 价值验证](/projects/neural-bsdf-perf/milestones/m3-value-validation/) · [M4 间接光代理](/projects/neural-bsdf-perf/milestones/m4-indirect-proxy/) · [M5 进阶](/projects/neural-bsdf-perf/milestones/m5-advanced/)
-- **性能**：[性能报告](/projects/neural-bsdf-perf/performance/) · [GPU Trace 方法手册](/projects/neural-bsdf-perf/gpu-trace-guide/)
-- **研究**：[全景与研究路线](/projects/neural-bsdf-perf/research/) · [波动光学](/projects/neural-bsdf-perf/wave-optics/) · [代码导读](/projects/neural-bsdf-perf/code-guide/) · [论文笔记（12 篇）](/projects/neural-bsdf-perf/papers/)
+**诚实的结论：** 到目前为止，神经材质还没有证明自己比原方案划算（见[性能报告](/projects/neural-bsdf-perf/performance/)与[里程碑总览](/projects/neural-bsdf-perf/milestones/)）。
 
-## 问题
-神经材质(Neural BSDF)接入 Unreal Engine 后,需要持续比较不同实现(Latent、QTP、Latent128、Slab 近似等)的 GPU 开销。靠手工记录单次结果,难以复现,也容易被环境波动误导。
+## 当前状态
 
-## 做了什么
+| 方面 | 现状 | 见 |
+|---|---|---|
+| 阶段 | M0–M2、M4 完成；M3 第一轮完成（对 OpenPBR 教师不划算），第二轮等待 Automotive 资产；M5 部分完成（tensor core 需要预览 SDK） | [里程碑报告一览](/projects/neural-bsdf-perf/milestones/) |
+| 接入 | 神经 BSDF 接入 Substrate 延迟光照（独立标志与逐像素数据，不需要 glint），接收阴影与多光源；间接光使用拟合到网络的逐 texel Slab 代理 | [系统架构](/projects/neural-bsdf-perf/architecture/) |
+| 质量 | 以 OpenPBR 多层材质为教师，同路径误差 11.8% | [捕获与对比](/projects/neural-bsdf-perf/capture-and-comparison/) |
+| 性能 | 2048² 全屏：神经 latent 约 16 ms、QTP 约 12.5 ms，完整 OpenPBR 约 8 ms；瓶颈是 168 寄存器 / 线程导致的低占用率 | [性能报告](/projects/neural-bsdf-perf/performance/) |
+| 下一步 | 把神经求值从 `DeferredLightPixelMain` 拆成独立 pass；之后是间接光适配 | [性能报告](/projects/neural-bsdf-perf/performance/) 第 6 节 |
 
-- **采集**:固定渲染环境(全屏四边形、1 盏平行光加 2 盏点光、无阴影与 GI),批量计时;同时用 nvidia-smi 采样 SM 时钟与 P-state,让降频的结果一眼可见。
-- **归档**:汇总 190 份历史基准报告,按实验分组、合并重复运行,覆盖 33 个 2048px 实验与 4 套测量协议。
-- **回归检查**:固定一次实验作为基线,容差默认 5%,超限时返回非零退出码,可直接接入 CI。
+## 文档目录
 
-## 两个发现
+左侧的目录树与下面一一对应。
 
-1. **不同测量协议的结果不可直接比较。** 早期用 1024px 逐帧计时,同一材质约 109 ms;后期改为 2048px 批量计时后约 17 ms,差一个量级。所以比较键包含"分辨率与计时方式",只在同一协议内对比。
-2. **会话之间存在漂移。** 对照材质 OpenPBR 没有任何改动,在不同实验中的耗时却在 7.67–8.80 ms 之间波动(约 15%),来源是 GPU 时钟、驱动与温度等。只比原始毫秒数会把这种波动误判成性能变化,因此回归检查改用**相对对照材质的耗时比值**。
+| 分组 | 页面 | 内容 |
+|---|---|---|
+| 设计 | [系统架构](/projects/neural-bsdf-perf/architecture/) | 当前系统：模块、BSDF 契约、图集、Substrate 接入、求值器、命令与限制 |
+| | [代码导读](/projects/neural-bsdf-perf/code-guide/) | 本项目与研究仓库的代码怎么读 |
+| 里程碑 | [里程碑总览](/projects/neural-bsdf-perf/milestones/) | M2–M5 的一览，以及被推翻的判断和项目现在的位置 |
+| | M2 / M3 / M4 / M5 | 各里程碑的独立报告，见左侧目录 |
+| 性能 | [性能报告](/projects/neural-bsdf-perf/performance/) | 结论、各轮结果、瓶颈分析、下一步 |
+| | [GPU Trace 手册](/projects/neural-bsdf-perf/gpu-trace-guide/) | 工具、基准、录与读 GPU Trace |
+| | [基准与回归](/projects/neural-bsdf-perf/benchmark/) | 固定环境的基准、190 份历史报告归档、回归检查 |
+| | [捕获与对比](/projects/neural-bsdf-perf/capture-and-comparison/) | 教师材质、引擎内捕获、训练、同路径对比 |
+| 规划 | [路线图](/projects/neural-bsdf-perf/roadmap/) | 定位、目标架构、M0–M5 计划与状态 |
+| | [Demo 计划](/projects/neural-bsdf-perf/demos/) | Demo 计划与公开场景、资产清单 |
+| | [项目历程](/projects/neural-bsdf-perf/history/) | 时间线、最早的 Custom 节点原型、已完成或被取代的计划 |
+| 调研 | [全景与研究路线](/projects/neural-bsdf-perf/research/) | 游戏引擎各模块的神经技术地图、材质与光照边界、阅读顺序 |
+| | [波动光学（调研）](/projects/neural-bsdf-perf/wave-optics/) | 调研，项目未涉及；神经外观与波动光学的边界 |
+| 论文 | [论文笔记总览](/projects/neural-bsdf-perf/papers/) | 12 份论文与课程资料的逐篇解析 |
 
-## 验证
+## 从哪里开始读
 
-- 在真实数据上:`M5m2` 实验里神经材质的原始耗时看起来快了 8.9%,但对照材质同样快了 10.5%,折算成比值仅 +1.7%,判为正常。
-- 人为把一组数据的神经材质耗时放大 15%,检查给出 +14.0% 并判定失败(退出码 1),其余材质不受影响。
+| 想知道 | 读 |
+|---|---|
+| 项目要做什么、做到哪了 | [路线图](/projects/neural-bsdf-perf/roadmap/) |
+| 神经技术在游戏引擎各模块的全景，神经材质的位置 | [全景与研究路线](/projects/neural-bsdf-perf/research/) |
+| GPU 基准与回归检查怎么做的 | [基准与回归](/projects/neural-bsdf-perf/benchmark/) |
+| 现在多快、为什么慢、下一步改什么 | [性能报告](/projects/neural-bsdf-perf/performance/) |
+| 怎么自己测一遍、怎么读 Nsight | [GPU Trace 手册](/projects/neural-bsdf-perf/gpu-trace-guide/) |
+| 神经材质怎样接进 UE 的渲染、光照怎样作用于它 | [系统架构](/projects/neural-bsdf-perf/architecture/) |
+| 这个项目是怎么一步步做到现在的 | [项目历程](/projects/neural-bsdf-perf/history/) |
+| 误差怎么测、和教师差多少 | [捕获与对比](/projects/neural-bsdf-perf/capture-and-comparison/) |
+| M2–M5 做了什么、测到什么、项目现在在哪 | [里程碑报告一览](/projects/neural-bsdf-perf/milestones/) |
+| 接下来做哪些 demo、用什么资源 | [Demo 计划与资源](/projects/neural-bsdf-perf/demos/) |
+| 某篇论文讲了什么 | [逐篇解析索引](/projects/neural-bsdf-perf/papers/) |
+| 衍射、结构色能否神经化；Zorah / NvRTX 有没有神经材质 | [神经外观与波动光学](/projects/neural-bsdf-perf/wave-optics/) |
 
-## 趋势
-![2048px 批量协议下各材质的 GPU 耗时](/assets/img/perf-2048.svg)
-
-图为同一协议下每次实验的耗时中位数(重复运行已合并)。其中 `R1_M1` 一处尖峰:NeuralLatent 约 38 ms、NeuralQTP 约 81 ms,而对照材质正常,说明是该配置本身让神经材质变慢,而非环境波动。
-
-{% comment %} TODO(补充): R1_M1 这次具体改了什么、怎么定位的 {% endcomment %}
-
-## 局限
-
-- 比值法假设各材质在 GPU 时钟变化时按相近比例缩放,是近似,不是严格成立。
-- 目前依赖编辑器侧的 MCP 采集,仅在单机单卡上验证。
-
-{% comment %} TODO(补充): 脚本整理成公开仓库后,在「局限」下方放链接 {% endcomment %}
-
-
-## 延伸:GPU 推理知识体系
-神经材质把"一次 BSDF 求值"变成了 shader 里的一次小网络推理。围绕它,项目沉淀出一张 GPU 推理的知识地图:
-
-- **成本模型**:求值的耗时主要被什么限制。2048² 全屏下,神经 latent 约 16 ms、QTP 约 12.5 ms,完整 OpenPBR 约 8 ms;瓶颈与每线程的寄存器占用(约 168 个)有关。
-- **数据与精度**:latent 图集怎么组织,packed fp16 的实验结果。
-- **执行路径**:神经求值内联在延迟光照 pass 里,还是拆成独立 pass;Wave 与 Tensor Core 能不能用、值不值得。
-- **测量方法**:固定环境的基准、GPU Trace 与 PC 采样的读法、停顿原因分类。
-- **和管线的接口**:BSDF 契约,以及接入 Substrate 延迟光照的方式。
-
-{% comment %}
-  TODO(补充): 这一节现在是提纲。每一块建议补:
-  1) 一个你最有把握的结论或数字;2) 一张图(例如寄存器占用与耗时的关系、不同精度的对比);
-  3) 链接到你自己的详细笔记(Doc/NeuralRendering 下对应文档)。
-  公开前核对:这些笔记里若有内部资产或未公开数据,不要放进来。
-{% endcomment %}
+外部资料（论文 PDF 索引、本地研究仓库的状态说明、插件 README 与复现说明）保存在本地，不随站点发布。研究仓库中的工程已下载不等于已构建或复现，准备状态以各仓库自己的 README 为准。

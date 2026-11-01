@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 48
+order: 59
 side_title: Neural Layered BRDFs
 mermaid: true
 ---

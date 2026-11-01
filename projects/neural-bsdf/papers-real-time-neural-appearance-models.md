@@ -7,7 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 group: 论文
-order: 40
+order: 51
 side_title: Neural Appearance 2024
 mermaid: true
 ---

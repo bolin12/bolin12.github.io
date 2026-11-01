@@ -6,8 +6,8 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 研究
-order: 30
+group: 调研
+order: 40
 side_title: 全景与研究路线
 mermaid: true
 ---

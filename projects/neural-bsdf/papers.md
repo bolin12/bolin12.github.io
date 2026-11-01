@@ -6,8 +6,8 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 研究
-order: 33
+group: 论文
+order: 50
 side_title: 论文笔记总览
 ---
 更新：2026-10-22。本文回答：每份论文与课程资料讲了什么、在全景中的位置。12 份 PDF（正文、补充材料、课程讲义和幻灯片）各自对应一份中文解析。PDF 原文保存在 `papers`，本目录只保存解析。
