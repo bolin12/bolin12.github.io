@@ -33,6 +33,7 @@ sections:
             text: 开发模型面数、像素开销、场景资源统计等调试与统计工具；定位并修复数值精度、资产导入、Shader 翻译及图形 API 相关崩溃，结合 RenderDoc、Unreal Insights、ProfileGPU 分析渲染异常与性能瓶颈。
             note: （你说的“工具移植”我改成了这个名字，可改回；建议补：谁在用、修复崩溃的数量或影响范围）
           - label: AI 研发基建
+            page: /projects/ue-ai-infra/
             text: 面向 Unreal Engine 的 AI 辅助研发工作流（CodeGraph、UE Reviewer、UnrealMCP、TraceMCP、RenderTrail），覆盖代码审查、性能分析、问题定位；探索自动化调试闭环，推动 AI 在引擎研发流程中的落地。
             note: （按你的想法归到公司下；建议补：起止时间、你具体负责哪几个、使用规模、节省了多少时间）
 

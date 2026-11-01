@@ -54,3 +54,6 @@ table{border-collapse:collapse}td,th{border:1px solid var(--line);padding:6px 12
 .resume li{font-size:14.5px;line-height:1.5;margin:1px 0}
 .resume li strong{font-weight:600}
 .resume .note{display:inline-block;margin:0 0 0 6px;padding:0 6px;font-size:12px;font-weight:400;line-height:1.45;letter-spacing:0;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:4px}
+.resume a.role,.resume a.link{color:var(--accent)}
+.resume a.role::after,.resume a.link::after{content:" →"}
+.resume a.link{font-size:13px;margin-left:4px;white-space:nowrap}

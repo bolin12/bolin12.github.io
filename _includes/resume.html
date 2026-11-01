@@ -5,7 +5,7 @@
 {% for it in s.items %}
 <div class="entry"><span><span class="org">{{ it.title }}</span>{% if it.sub %}<span class="role">{{ it.sub }}</span>{% endif %}{% if it.page %}<a class="role" href="{{ it.page | relative_url }}">{{ include.page_label | default: "项目页" }}</a>{% endif %}{% if it.note %}<span class="note">{{ it.note }}</span>{% endif %}</span><span class="when">{{ it.date }}</span></div>
 {% if it.points %}<ul>
-{% for p in it.points %}<li>{% if p.label %}<strong>{{ p.label }}</strong>{{ sep }}{% endif %}{{ p.text }}{% if p.note %} <span class="note">{{ p.note }}</span>{% endif %}</li>
+{% for p in it.points %}<li>{% if p.label %}<strong>{{ p.label }}</strong>{{ sep }}{% endif %}{{ p.text }}{% if p.page %} <a class="link" href="{{ p.page | relative_url }}">{{ include.page_label | default: "项目页" }}</a>{% endif %}{% if p.note %} <span class="note">{{ p.note }}</span>{% endif %}</li>
 {% endfor %}</ul>{% endif %}
 {% endfor %}
 {% endfor %}

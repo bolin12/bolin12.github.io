@@ -10,3 +10,7 @@
   desc: 在 UE VulkanRHI 中实现 NoGraphicsAPI 风格的公共 Root 地址参数模型。(待补充)
   url: https://github.com/bolin12
   tags: [Vulkan, RHI]
+- name: UE 研发 AI 基建
+  desc: 面向 Unreal Engine 的 AI 辅助研发工作流:代码审查、性能分析、问题定位。(待补充)
+  url: /projects/ue-ai-infra/
+  tags: [Unreal Engine, MCP, AI]
