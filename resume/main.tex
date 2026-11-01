@@ -32,11 +32,18 @@ REDACTED，%
 [2025.06--至今]
 
 \begin{itemize}
-\item \textbf{渲染特性开发}：负责 Unreal Engine 渲染特性定制，包括调试视图、光束遮蔽、半透明阴影、灯光函数；完成引擎插件移植与多平台画质适配。（建议补：移植了哪些插件、覆盖哪些平台）
-\item \textbf{性能与资源优化}：围绕 CPU/GPU、内存与加载效率做专项优化——骨骼剔除、Shader 变体清理、离线阴影压缩、HLOD 卸载、纹理降级、资源流送分帧；支持多平台资产与材质分离，编辑器与运行时统一管理。（建议补数字：Shader 变体减少多少、内存降低 X MB、加载缩短 X\%、GPU 耗时降低多少）
-\item \textbf{研发工具链}：开发模型面数、像素开销、场景资源统计等调试与统计工具。（建议补：谁在用、节省了多少排查时间）
-\item \textbf{引擎稳定性}：定位并修复数值精度、资产导入、Shader 翻译及图形 API 相关崩溃；结合 RenderDoc、Unreal Insights、ProfileGPU 分析渲染异常与性能瓶颈。（建议补：修复崩溃的数量或影响范围）
-\item \textbf{AI 研发基建}：参与建设面向 Unreal Engine 的 AI 辅助研发工作流（CodeGraph、UE Reviewer、UnrealMCP、TraceMCP、RenderTrail），探索代码审查、性能分析、问题定位与自动化调试闭环。
+\item \textbf{渲染特性开发}：Unreal Engine 渲染特性定制（调试视图、光束遮蔽、半透明阴影、灯光函数）；引擎插件移植与多平台画质适配。（建议补：移植了哪些插件、覆盖哪些平台）
+\item \textbf{性能与资源优化}：骨骼剔除、Shader 变体清理、离线阴影压缩、HLOD 卸载、纹理降级、资源流送分帧；支持多平台资产与材质分离，编辑器与运行时统一管理。（建议补数字：Shader 变体减少多少、内存降低 X MB、加载缩短 X\%、GPU 耗时降低多少）
+\item \textbf{工具链与稳定性}：开发模型面数、像素开销、场景资源统计等调试与统计工具；定位并修复数值精度、资产导入、Shader 翻译及图形 API 相关崩溃，结合 RenderDoc、Unreal Insights、ProfileGPU 分析渲染异常与性能瓶颈。（你说的"工具移植"我改成了这个名字，可改回；建议补：谁在用、修复崩溃的数量或影响范围）
+\end{itemize}
+
+\ResumeItem
+{AI 研发基建} % （体量较大，按你的想法单开一项）
+[CodeGraph、UE Reviewer、UnrealMCP、TraceMCP、RenderTrail]
+[（建议补：起止时间）]
+
+\begin{itemize}
+\item 面向 Unreal Engine 的 AI 辅助研发工作流，覆盖代码审查、性能分析、问题定位；探索自动化调试闭环，推动 AI 在引擎研发流程中的落地。（建议补：你具体负责哪几个、使用规模、节省了多少时间）
 \end{itemize}
 
 \ResumeItem
@@ -49,7 +56,16 @@ REDACTED，%
 \item \textbf{移动端 VRS}：开启可变着色率（VRS），降低着色压力。
 \end{itemize}
 
-\section{个人项目} % （我把神经材质调到最前面，可调整）
+\section{个人项目} % （我把神经材质相关放在最前面，可调整）
+
+\ResumeItem
+{神经材质 GPU 性能基准与回归体系}[] % （新增，基于你的基准脚本）
+[2026.10--至今] % （按最早一份基准报告 2026-10-18 推算，请核对）
+\begin{itemize}
+\item 固定渲染环境并批量计时，用 nvidia-smi 采样 GPU 时钟识别降频；归档 190 份报告、33 个 2048px 实验、4 套测量协议。
+\item 发现并处理两类“不可比”：测量协议不同（1024px 逐帧约 109 ms 与 2048px 批量约 17 ms），以及会话漂移（未改动的对照材质在 7.7--8.8 ms 间波动约 15\%）；回归检查改用相对对照材质的耗时比值。
+\item 钉基线加 5\% 容差检查，超限返回非零退出码可接 CI；人为放大 15\% 的数据被识别为 +14.0\%。
+\end{itemize}
 
 \ResumeItem
 {神经材质（Neural BSDF）在 UE 的适配与优化}[]

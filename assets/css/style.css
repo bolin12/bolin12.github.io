@@ -42,3 +42,4 @@ table{border-collapse:collapse}td,th{border:1px solid var(--line);padding:6px 12
 .resume ul{margin:2px 0 6px;padding-left:20px}
 .resume li{margin:0}
 .resume .entry{margin:10px 0 2px}
+.more{font-size:13px;font-weight:400;margin-left:8px}

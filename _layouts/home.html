@@ -16,7 +16,7 @@ layout: default
 
 <div class="prose">{{ content }}</div>
 
-<h2 class="section">项目</h2>
+<h2 class="section">项目 <a class="more" href="{{ '/projects/' | relative_url }}">全部</a></h2>
 <div class="cards">
   {% for p in site.data.projects %}
   <a class="card" href="{{ p.url }}">
