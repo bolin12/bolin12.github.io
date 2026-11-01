@@ -1,0 +1,22 @@
+﻿title: 我的主页
+description: 个人博客与简历
+# 推送前把下面两行改成你的信息;仓库名为 <用户名>.github.io 时 url 填 https://<用户名>.github.io,baseurl 留空
+url: "https://YOUR_USERNAME.github.io"
+baseurl: ""
+lang: zh-CN
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+minima:
+  social_links:
+    github: YOUR_USERNAME
+header_pages:
+  - blog.md
+  - resume.md
+  - about.md
+show_excerpts: true
+exclude:
+  - resume/
+  - scripts/
+  - README.md
