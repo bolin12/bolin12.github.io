@@ -1,13 +1,19 @@
-name: Site and resume
+name: Resume tex
 
+# Only runs when the resume sources change. No PDF is built here: copy resume/ into Overleaf
+# (main.tex + resume.cls) and compile it there.
 on:
   push:
-    branches: [main, resume-pipeline]
+    branches: [main]
+    paths:
+      - _data/resume.yml
+      - resume.md
+      - scripts/build_resume.py
+      - .github/workflows/resume.yml
   workflow_dispatch:
 
 permissions:
   contents: write
-  pages: write
 
 jobs:
   site:
@@ -21,7 +27,7 @@ jobs:
       - run: bundle install
       - run: bundle exec jekyll build
 
-  resume:
+  tex:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,38 +35,16 @@ jobs:
         with:
           python-version: "3.12"
       - run: pip install pyyaml
-
-      # No phone number here: the PDF is published, so it is as public as the page.
-      - name: Generate main.tex
-        run: python scripts/build_resume.py
-
-      - uses: xu-cheng/latex-action@v3
-        with:
-          root_file: main.tex
-          working_directory: resume
-          latexmk_use_xelatex: true
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: resume-pdf
-          path: resume/main.pdf
-
-      - name: Publish PDF and main.tex (main only)
-        if: github.ref == 'refs/heads/main'
-        env:
-          GH_TOKEN: ${{ github.token }}
+      # No phone number here: the repository is public.
+      - run: python scripts/build_resume.py
+      - name: Commit main.tex if it changed
         run: |
-          mkdir -p assets
-          cp resume/main.pdf assets/resume.pdf
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add resume/main.tex assets/resume.pdf
+          git add resume/main.tex
           if git diff --cached --quiet; then
-            echo "nothing to publish"
+            echo "main.tex is up to date"
           else
-            git commit -m "Update generated resume.tex and resume.pdf"
+            git commit -m "Update generated resume/main.tex"
             git push
-            # Pushes made with the workflow token do not start the Pages build by themselves.
-            curl -fsS -X POST -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${{ github.repository }}/pages/builds"
           fi
