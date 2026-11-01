@@ -48,11 +48,6 @@ sections:
           - label: Regression checks
             text: Pinned a baseline with a 5% tolerance check that returns a non-zero exit code on regression, so it can run in CI; an artificial 15% slowdown was detected as +14.0%.
 
-      - title: Stateless Vulkan Layer Features
-        date: Jul 2026 – Present
-        points:
-          - text: Implemented a NoGraphicsAPI-style common root-address parameter model in UE's VulkanRHI while keeping the original renderer and gameplay shaders, and validated real graphics and compute paths, lifetimes, and performance cost against the original.
-
       - title: Automated Troubleshooting Workflow for UE Development
         date: Jul 2026 – Present
         points:

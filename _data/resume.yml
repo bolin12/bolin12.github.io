@@ -62,12 +62,6 @@ sections:
           - label: 回归检查
             text: 钉基线加 5% 容差检查，超限返回非零退出码可接 CI；人为放大 15% 的数据被识别为 +14.0%。
 
-      - title: 无状态 Vulkan 层新特性
-        date: 2026.07–至今
-        points:
-          - text: 在 UE VulkanRHI 中实现 NoGraphicsAPI 风格的公共 Root 地址参数模型，保留原 Renderer 与业务 Shader，完成真实图形／计算路径、生命周期及性能成本对照验证。
-            note: （建议补：目的和收益，如降低 CPU 侧绑定开销，并写出对照结果）
-
       - title: UE 开发自动化排障工作流
         date: 2026.07–至今
         points:
