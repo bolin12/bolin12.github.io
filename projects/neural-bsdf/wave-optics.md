@@ -62,7 +62,7 @@ flowchart LR
 |---|---|---|
 | 双缝 / Cornell box（Wave Tracer 自带场景） | 衍射、干涉条纹；神经代理相对物理教师的误差 | [Wave Tracer 仓库](https://github.com/ssteinberg/wave_tracer)：`scenes/diffraction_simple/double_slits.xml`、`scenes/cornell-box/box.xml`、`scenes/bidir_room/room.xml`。CPU、早期 alpha，计算量约为普通光线追踪的 5–20 倍；许可证 CC BY-NC 4.0，使用前确认用途 |
 
-建议的顺序：先复现双缝条纹或单个衍射表面的角度 / 波长响应，以 Wave Tracer 或目标离线 shader 为参考；训练代理后用未见的缝宽、微结构、波长和入射角测试；通过后再放进 Cornell box 或 UE 的小型受控场景。材质与 UE 场景用的通用测试资源见 [Demo 计划与资源](/projects/neural-bsdf-perf/demos/)。
+建议的顺序：先复现双缝条纹或单个衍射表面的角度 / 波长响应，以 Wave Tracer 或目标离线 shader 为参考；训练代理后用未见的缝宽、微结构、波长和入射角测试；通过后再放进 Cornell box 或 UE 的小型受控场景。材质与 UE 场景用的通用测试资源见 [路线图](/projects/neural-bsdf-perf/roadmap/)。
 
 ## 5. 可核验的波动光学渲染工作
 
@@ -77,7 +77,7 @@ flowchart LR
 
 ## 6. NvRTX、Zorah 与 RTXNS 是什么
 
-- **RTXNS**：NVIDIA 的神经 shader SDK 与示例，展示在 Slang 中训练或推理小型网络；不是 NvRTX 中自动启用的神经外观系统（本地 `RTXNS`，见 [本地研究代码导读](/projects/neural-bsdf-perf/code-guide/) 2.5 节）。
+- **RTXNS**：NVIDIA 的神经 shader SDK 与示例，展示在 Slang 中训练或推理小型网络；不是 NvRTX 中自动启用的神经外观系统（本地 `RTXNS`，见 本地研究代码（未发布））。
 - **NvRTX-5.8**：NVIDIA 修改的 UE 源码分支，提供 DLSS、NRD、NIS、RTX 路径追踪等能力。神经上采样或降噪不等于神经材质。
 - **Zorah**：基于较早 NvRTX 分支的场景与路径追踪样例。本地 README 把重点列为 RTX Mega Geometry、RTXDI、ReSTIR GI / PT 和 DLSS；工程启用了 DLSS / Streamline 插件；已检查的资产中没有找到 NTC、神经材质或 NRC。快速入门里的「neural graphics technologies」是概括性描述，不能证明集成了神经外观。
 

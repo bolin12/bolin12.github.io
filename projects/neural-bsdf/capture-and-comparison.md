@@ -23,7 +23,7 @@ side_title: 捕获与对比
 |---|---|---|
 | 引擎内置 `MF_Substrate_OpenPBR_Opaque` | 完整 OpenPBR：金属、coat、fuzz、thin film、SSS、透射 | 已用于 `M_Teacher_OpenPBR`（程序化 UV 图案驱动金属/铜色、青色漆、coat 条带、fuzz 区域） |
 | 引擎内置 `Substrate-StandardSurface-Opaque` | Autodesk Standard Surface | 备选 |
-| Epic 官方 **Automotive Substrate Materials**（Fab 免费，2026-02） | 280 个材质、约 150 个 setup、约 50 个模板；单/双/三层车漆、glint 与彩色 glint、thin film、各向异性、上蜡皮革、实测金属、指纹划痕；含总览地图和 lookdev 地图 | 需要在 Fab 登录并加入库后导入 Demo；要求 UE 5.7.3+ 与 Adaptive GBuffer，本工程均满足。用于 Roadmap M3 与 [Demo 1](/projects/neural-bsdf-perf/demos/) |
+| Epic 官方 **Automotive Substrate Materials**（Fab 免费，2026-02） | 280 个材质、约 150 个 setup、约 50 个模板；单/双/三层车漆、glint 与彩色 glint、thin film、各向异性、上蜡皮革、实测金属、指纹划痕；含总览地图和 lookdev 地图 | 需要在 Fab 登录并加入库后导入 Demo；要求 UE 5.7.3+ 与 Adaptive GBuffer，本工程均满足。用于 Roadmap M3 与 [路线图](/projects/neural-bsdf-perf/roadmap/) |
 | Electric Dreams 样例 | Substrate 欧泊材质球（UE 5.2 时代） | 可选补充 |
 | 本机 Zorah 样例（UE 5.4 NvRTX） | 扫描纹理的金属、大理石、石灰岩等，但为旧材质（Substrate 下转换为单层 Slab） | 留作后续真实场景阶段，需要迁移 |
 

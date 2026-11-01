@@ -1,15 +1,7 @@
 ---
 layout: page
 title: "本地研究代码导读"
-permalink: /projects/neural-bsdf-perf/code-guide/
 body_class: resume
-nav: projects
-parent: /projects/neural-bsdf-perf/
-parent_title: 神经材质
-group: 设计与规划
-order: 2
-side_title: 代码导读
-mermaid: true
 ---
 更新：2026-10-22。本文回答：本地研究目录中各研究仓库的代码怎么读：每个网络在拟合什么，表示怎样从训练器流到资源和着色器，入口文件在哪里。
 

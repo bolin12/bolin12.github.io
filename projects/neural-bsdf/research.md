@@ -188,7 +188,7 @@ flowchart TB
 | 衍射等波动光学外观 | GratNet（2025） |
 | 材质数据增强与生成 | Toward Richer Material Generation（2026） |
 
-各篇解析见 [逐篇解析索引](/projects/neural-bsdf-perf/papers/)，本地代码见 [本地研究代码导读](/projects/neural-bsdf-perf/code-guide/)。
+各篇解析见 [逐篇解析索引](/projects/neural-bsdf-perf/papers/)，本地代码见 本地研究代码（未发布）。
 
 ## 6. 阅读顺序
 

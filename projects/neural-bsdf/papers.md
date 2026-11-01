@@ -28,6 +28,6 @@ side_title: 论文笔记总览
 | GratNet（arXiv 2025）：用神经代理近似衍射表面的受限反射响应 | 材质：波动光学（衍射） | [解析](/projects/neural-bsdf-perf/papers/gratnet/) | [arXiv:2506.15815](https://arxiv.org/abs/2506.15815) | 15 |
 | Toward Richer Material Generation（SIGGRAPH 2026）：先增强材质数据，再生成神经材质 | 其他模块：内容生产工具 | [解析](/projects/neural-bsdf-perf/papers/richer-material-generation/) | [NVIDIA Research](https://research.nvidia.com/labs/rtr/publication/yu2026toward/) | 11 |
 
-SDK：[RTXNS](https://github.com/NVIDIA-RTX/RTXNS)（神经 shader 的训练与推理，属于公共底座）不对应单篇论文，见 [本地研究代码导读](/projects/neural-bsdf-perf/code-guide/) 2.5 节。
+SDK：[RTXNS](https://github.com/NVIDIA-RTX/RTXNS)（神经 shader 的训练与推理，属于公共底座）不对应单篇论文，见 本地研究代码（未发布）。
 
 论文文件是来源处提供的 PDF，没有重新排版或改写；阅读时以原文和作者仓库为准，解析中的工程建议是基于这些来源和本地代码结构的归纳。阅读顺序见 [全景与研究路线](/projects/neural-bsdf-perf/research/) 第 6 节。
