@@ -2,6 +2,7 @@
 layout: page
 title: 简历
 permalink: /resume/
+body_class: resume
 ---
 ## 教育经历 （我调成了倒序，与工作经历一致，可改回）
 <div class="entry"><span>中国科学院大学 · 硕士 · 计算机视觉 & 计算机图形</span><span class="when">2022.09 – 2025.06</span></div>
