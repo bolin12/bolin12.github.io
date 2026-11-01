@@ -44,3 +44,13 @@ table{border-collapse:collapse}td,th{border:1px solid var(--line);padding:6px 12
 .resume .entry{margin:10px 0 2px}
 .more{font-size:13px;font-weight:400;margin-left:8px}
 .header-note{margin:0 auto 0 14px;color:var(--muted);font-size:13px}.note{font-size:.9em}
+.resume h2{font-size:19px;margin:30px 0 8px;padding-bottom:6px;border-bottom:2px solid var(--accent);letter-spacing:.04em}
+.resume .entry{align-items:baseline;margin:16px 0 4px;font-weight:400}
+.resume .org{font-size:16px;font-weight:700}
+.resume .role{font-size:15px;font-weight:400;color:var(--muted)}
+.resume .role::before{content:"·";margin:0 .5em}
+.resume .when{font-size:13px;font-variant-numeric:tabular-nums}
+.resume ul{margin:4px 0 12px;padding-left:20px}
+.resume li{font-size:14.5px;line-height:1.65;margin:3px 0}
+.resume li strong{font-weight:600}
+.resume .note{display:inline-block;margin:0 0 0 8px;padding:0 7px;font-size:12px;font-weight:400;line-height:1.6;letter-spacing:0;color:var(--muted);background:var(--card);border:1px dashed var(--line);border-radius:4px}

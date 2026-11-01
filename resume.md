@@ -10,7 +10,7 @@ show_email: true
 {% for s in r.sections %}
 <h2>{{ s.title }}{% if s.note %} <span class="note">{{ s.note }}</span>{% endif %}</h2>
 {% for it in s.items %}
-<div class="entry"><span>{{ it.title }}{% if it.sub %} · {{ it.sub }}{% endif %}{% if it.page %} · <a href="{{ it.page | relative_url }}">项目页</a>{% endif %}{% if it.note %} <span class="note">{{ it.note }}</span>{% endif %}</span><span class="when">{{ it.date }}</span></div>
+<div class="entry"><span><span class="org">{{ it.title }}</span>{% if it.sub %}<span class="role">{{ it.sub }}</span>{% endif %}{% if it.page %}<a class="role" href="{{ it.page | relative_url }}">项目页</a>{% endif %}{% if it.note %}<span class="note">{{ it.note }}</span>{% endif %}</span><span class="when">{{ it.date }}</span></div>
 {% if it.points %}<ul>
 {% for p in it.points %}<li>{% if p.label %}<strong>{{ p.label }}</strong>：{% endif %}{{ p.text }}{% if p.note %} <span class="note">{{ p.note }}</span>{% endif %}</li>
 {% endfor %}</ul>{% endif %}
