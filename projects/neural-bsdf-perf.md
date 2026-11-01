@@ -28,17 +28,17 @@ side_title: 神经材质
 
 | 分组 | 页面 | 内容 |
 |---|---|---|
-| 设计 | [系统架构](/projects/neural-bsdf-perf/architecture/) | 当前系统：模块、BSDF 契约、图集、Substrate 接入、求值器、命令与限制 |
+| 设计与规划 | [系统架构](/projects/neural-bsdf-perf/architecture/) | 当前系统：模块、BSDF 契约、图集、Substrate 接入、求值器、命令与限制 |
 | | [代码导读](/projects/neural-bsdf-perf/code-guide/) | 本项目与研究仓库的代码怎么读 |
+| | [路线图](/projects/neural-bsdf-perf/roadmap/) | 定位、目标架构、M0–M5 计划与状态 |
+| | [Demo 计划](/projects/neural-bsdf-perf/demos/) | Demo 计划与公开场景、资产清单 |
+| | [项目历程](/projects/neural-bsdf-perf/history/) | 时间线、最早的 Custom 节点原型、已完成或被取代的计划 |
 | 里程碑 | [里程碑总览](/projects/neural-bsdf-perf/milestones/) | M2–M5 的一览，以及被推翻的判断和项目现在的位置 |
 | | M2 / M3 / M4 / M5 | 各里程碑的独立报告，见左侧目录 |
 | 性能 | [性能报告](/projects/neural-bsdf-perf/performance/) | 结论、各轮结果、瓶颈分析、下一步 |
 | | [GPU Trace 手册](/projects/neural-bsdf-perf/gpu-trace-guide/) | 工具、基准、录与读 GPU Trace |
 | | [基准与回归](/projects/neural-bsdf-perf/benchmark/) | 固定环境的基准、190 份历史报告归档、回归检查 |
 | | [捕获与对比](/projects/neural-bsdf-perf/capture-and-comparison/) | 教师材质、引擎内捕获、训练、同路径对比 |
-| 规划 | [路线图](/projects/neural-bsdf-perf/roadmap/) | 定位、目标架构、M0–M5 计划与状态 |
-| | [Demo 计划](/projects/neural-bsdf-perf/demos/) | Demo 计划与公开场景、资产清单 |
-| | [项目历程](/projects/neural-bsdf-perf/history/) | 时间线、最早的 Custom 节点原型、已完成或被取代的计划 |
 | 调研 | [全景与研究路线](/projects/neural-bsdf-perf/research/) | 游戏引擎各模块的神经技术地图、材质与光照边界、阅读顺序 |
 | | [波动光学（调研）](/projects/neural-bsdf-perf/wave-optics/) | 调研，项目未涉及；神经外观与波动光学的边界 |
 | 论文 | [论文笔记总览](/projects/neural-bsdf-perf/papers/) | 12 份论文与课程资料的逐篇解析 |

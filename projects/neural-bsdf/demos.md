@@ -6,8 +6,8 @@ body_class: resume
 nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
-group: 规划
-order: 31
+group: 设计与规划
+order: 4
 side_title: Demo 计划
 ---
 更新：2026-10-22。本文回答：接下来做哪些 demo、每个 demo 回答什么问题、用哪些公开场景与资产。每个 demo 配一份短报告（做了什么、测到什么、取舍是什么）。资源状态于 2026-10-22 查询，授权和版本支持经常变化，获取前以官方页面为准。
