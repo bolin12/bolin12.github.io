@@ -2,7 +2,7 @@
   desc: 将神经材质接入 Unreal Engine 并做性能优化,配套可复现的 GPU 基准、基线与回归检查。
   url: /projects/neural-bsdf-perf/
   tags: [Unreal Engine, GPU, Benchmark]
-- name: UE 研发 AI 基建
-  desc: 面向 Unreal Engine 的 AI 辅助研发工作流:代码审查、性能分析、问题定位。(待补充)
+- name: AI 辅助的 UE 研发与排障体系
+  desc: AI 研发基建加自动化排障工作流:代码审查、性能分析、问题定位,以及不停机的排查闭环。(待补充)
   url: /projects/ue-ai-infra/
   tags: [Unreal Engine, MCP, AI]
