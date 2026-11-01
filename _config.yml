@@ -1,9 +1,11 @@
-﻿title: 我的主页
-description: 个人博客与简历
+﻿title: Bolin
+description: 图形渲染与 GPU 优化的个人博客与简历
 # 推送前把下面两行改成你的信息;仓库名为 <用户名>.github.io 时 url 填 https://<用户名>.github.io,baseurl 留空
 url: "https://bolin12.github.io"
 baseurl: ""
 lang: zh-CN
+author: Bolin
+tagline: 图形渲染 / GPU 优化 · 正在学习实时渲染与神经材质
 theme: minima
 plugins:
   - jekyll-feed
@@ -20,3 +22,4 @@ exclude:
   - resume/
   - scripts/
   - README.md
+

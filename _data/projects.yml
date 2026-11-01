@@ -1,0 +1,12 @@
+﻿- name: Neural BSDF in Unreal Engine
+  desc: 把神经网络材质接入 UE Substrate,研究 GPU 推理开销与实时渲染的取舍。
+  url: https://github.com/bolin12
+  tags: [Unreal Engine, HLSL, GPU]
+- name: 项目二(占位)
+  desc: 一两句话说明做了什么、结果如何。
+  url: https://github.com/bolin12
+  tags: [C++, Vulkan]
+- name: 项目三(占位)
+  desc: 一两句话说明做了什么、结果如何。
+  url: https://github.com/bolin12
+  tags: [Python]
