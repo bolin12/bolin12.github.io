@@ -18,11 +18,11 @@ layout: default
 
 <h2 class="section">项目 <a class="more" href="{{ '/projects/' | relative_url }}">全部</a></h2>
 <div class="cards">
-  {% for p in site.data.projects %}
-  <a class="card" href="{{ p.url }}">
+  {% for p in site.data.projects %}{% unless p.status == 'planned' %}
+  <a class="card" href="{{ p.url | relative_url }}">
     <h3>{{ p.name }}</h3>
     <p>{{ p.desc }}</p>
     <span class="chips">{% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}</span>
   </a>
-  {% endfor %}
+  {% endunless %}{% endfor %}
 </div>

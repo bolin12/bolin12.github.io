@@ -7,3 +7,9 @@
   desc: AI 研发基建加自动化排障工作流:代码审查、性能分析、问题定位,以及不停机的排查闭环。
   url: /projects/ue-ai-infra/
   tags: [Unreal Engine, MCP, AI]
+# status: planned 的项目只出现在项目页的“规划中”分区,首页不展示。
+- name: AI 原生游戏:生成、验证与自动调试
+  status: planned
+  desc: 规划中。让 agent 生成玩法原型、自动试玩验证,失败后自动复现与定位;尚未开始实现。
+  url: /projects/ai-native-game/
+  tags: [AI Agent, Game Dev]

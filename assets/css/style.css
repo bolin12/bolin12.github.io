@@ -66,3 +66,5 @@ nav a.active{color:var(--fg);font-weight:600;border-bottom:2px solid var(--accen
 .stat span{font-size:13px;color:var(--muted)}
 .chips-line{margin:6px 0 0;line-height:2}
 .me h2{margin-top:26px}
+.badge{display:inline-block;margin-left:6px;padding:0 8px;border:1px solid var(--line);border-radius:10px;font-size:12px;font-weight:500;line-height:1.7;color:var(--muted);vertical-align:middle}
+.card.planned{border-style:dashed}
