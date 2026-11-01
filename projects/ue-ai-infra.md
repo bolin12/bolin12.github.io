@@ -1,37 +1,37 @@
----
+﻿---
 layout: page
 title: AI 辅助的 UE 研发与排障体系
 permalink: /projects/ue-ai-infra/
 body_class: resume
 ---
-<!--
+{% comment %}
   TODO(补充) —— 这个页面还是骨架。下面的 HTML 注释是待补内容，网页上看不到；补完后把对应注释换成正文。
   若涉及公司内部的工具或数据，公开前请确认保密要求，不要放内部代码、截图和未公开的数据。
--->
+{% endcomment %}
 
 ## 概述
 面向 Unreal Engine 的 AI 辅助研发与排障体系，由两部分组成：**AI 研发基建**（代码审查、性能分析、问题定位）和**自动化排障工作流**（逻辑层与渲染层的不停机排查闭环）。目标是让一个 bug 从被发现到被定位、被验证，尽量由工具串起来，而不是靠人逐个翻日志。
 
-<!-- TODO(补充): 要解决的痛点是什么，例如排查一个渲染问题原来要多久、卡在哪一步。 -->
+{% comment %} TODO(补充): 要解决的痛点是什么，例如排查一个渲染问题原来要多久、卡在哪一步。 {% endcomment %}
 
 ## 组成：AI 研发基建
 CodeGraph、UE Reviewer、UnrealMCP、TraceMCP、RenderTrail。
 
-<!-- TODO(补充): 每个工具一句话说明它做什么、解决什么问题：
+{% comment %} TODO(补充): 每个工具一句话说明它做什么、解决什么问题：
   - CodeGraph:
   - UE Reviewer:
   - UnrealMCP:
   - TraceMCP:
   - RenderTrail:
--->
+{% endcomment %}
 
 ## 组成：自动化排障工作流
 - **逻辑与画面层闭环**：运行时中间状态无法全量记录，日志方案又需要重启进程。用 Rewind 记录异常轨道的终态，用 Checkpoint 保存关键检查点并迭代重放，用 windbg 记录异常流程，实现不停机的半自动 bug 排查闭环。
 - **渲染层数据结构化**：渲染 bug 涉及 RDG 与 GPU 层。综合 RDG 与截帧数据，以异常区域为起点定位资源或 Shader 问题，形成渲染侧的排查闭环。
 
-<!-- TODO(补充): 这两个闭环各自的输入、输出和一个真实案例。 -->
+{% comment %} TODO(补充): 这两个闭环各自的输入、输出和一个真实案例。 {% endcomment %}
 
-<!--
+{% comment %}
   TODO(补充) —— 新增小节「一个问题是怎么被处理的」
   用一个具体例子把上面的工具串成一条流水线，例如“发现渲染异常 → 取数据 → 定位 → 验证修复”。
   流水线讲清楚，比逐个罗列工具更能体现这是一个体系。
@@ -41,4 +41,4 @@ CodeGraph、UE Reviewer、UnrealMCP、TraceMCP、RenderTrail。
 
   TODO(补充) —— 新增小节「我的职责」
   这几项里你具体负责哪几个，哪些是主导、哪些是参与；AI 研发基建部分的起止时间也在这里补。
--->
+{% endcomment %}
