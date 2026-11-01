@@ -72,34 +72,48 @@ article table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scro
 article td,article th{vertical-align:top}
 article{overflow-wrap:break-word}
 body.wide .wrap{max-width:1060px}
-main.has-side{display:grid;grid-template-columns:200px minmax(0,1fr);gap:40px;align-items:start}
+main.has-side{display:grid;grid-template-columns:210px minmax(0,1fr);gap:40px;align-items:start}
 .main-col{min-width:0}
 main.has-side .main-col{max-width:780px}
 
-/* the project directory: a foldable tree that stays on the left */
-.side{position:sticky;top:16px;font-size:14px;line-height:1.5;padding-right:14px;border-right:1px solid var(--line)}
-.side-toggle{display:flex;align-items:center;gap:6px;width:100%;margin:0 0 4px;padding:5px 8px 5px 4px;border:0;border-radius:6px;background:none;color:var(--fg);font:inherit;font-size:17px;font-weight:700;line-height:1.4;text-align:left;cursor:pointer}
-.side-toggle:hover{background:var(--card)}
-.side-toggle:focus-visible,.side li a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+/* the project directory: a foldable tree (project > group > page) that stays on the left */
+.side{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow-y:auto;font-size:14px;line-height:1.5;padding-right:14px;border-right:1px solid var(--line)}
+.side-toggle,.grp-toggle{display:flex;align-items:center;gap:6px;width:100%;border:0;border-radius:6px;background:none;color:var(--fg);font:inherit;text-align:left;cursor:pointer}
+.side-toggle{margin:0 0 4px;padding:5px 8px 5px 4px;font-size:17px;font-weight:700;line-height:1.4}
+.grp-toggle{margin:2px 0;padding:4px 6px 4px 2px;font-size:14px;font-weight:600}
+.side-toggle:hover,.grp-toggle:hover{background:var(--card)}
+.side-toggle:focus-visible,.grp-toggle:focus-visible,.side li a:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
 .caret{flex:none;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid var(--muted);transition:transform .15s}
-.side.folded .caret{transform:rotate(-90deg)}
+.grp-toggle .caret{border-left-width:5px;border-right-width:5px;border-top-width:6px}
+[aria-expanded="false"]>.caret{transform:rotate(-90deg)}
+.grp-name{flex:1}
+.count{flex:none;font-size:12px;font-weight:400;color:var(--muted)}
 .side ul{list-style:none;margin:0 0 0 9px;padding:0 0 0 8px;border-left:1px solid var(--line)}
+.side ul ul{margin-left:7px}
 .side ul[hidden]{display:none}
 .side li a{display:block;padding:4px 10px;border-left:2px solid transparent;border-radius:0 6px 6px 0;color:var(--muted)}
 .side li a:hover{color:var(--fg);text-decoration:none;background:var(--card)}
-.side li.cur a{color:var(--fg);font-weight:600;background:var(--card);border-left-color:var(--accent)}
+.side li.cur>a{color:var(--fg);font-weight:600;background:var(--card);border-left-color:var(--accent)}
+.grp.has-cur>.grp-toggle{color:var(--accent)}
 
 /* medium windows: keep the directory on the left, just narrower */
 @media (max-width:900px){
-  main.has-side{grid-template-columns:150px minmax(0,1fr);gap:24px}
+  main.has-side{grid-template-columns:160px minmax(0,1fr);gap:24px}
   .side{padding-right:8px}
   .side li a{padding:4px 6px}
 }
-/* phones only: the directory moves above the text */
+/* phones only: the directory moves above the text, still as an indented tree */
 @media (max-width:640px){
   main.has-side{display:block}
-  .side{position:static;border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px;margin-bottom:16px}
-  .side ul{display:flex;flex-wrap:wrap;gap:4px 16px;margin:0 0 0 28px;padding:0;border-left:0}
-  .side li a{padding:2px 0;border-left:0;background:none;border-radius:0}
-  .side li.cur a{background:none;border-bottom:2px solid var(--accent)}
+  .side{position:static;max-height:none;overflow:visible;border-right:0;border-bottom:1px solid var(--line);padding:0 0 10px;margin-bottom:16px}
+}
+
+/* mermaid diagrams */
+.mermaid{overflow-x:auto;margin:14px 0;text-align:center}
+.mermaid svg{max-width:100%;height:auto}
+
+/* the current page's name next to the project name: only shown on phones, where the tree starts folded */
+.side-toggle .here{display:none}
+@media (max-width:640px){
+  .side-toggle .here{display:inline;margin-left:auto;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:400;color:var(--muted)}
 }

@@ -6,14 +6,14 @@ body_class: resume
 nav: projects
 side_title: 神经材质
 ---
-这个项目有一套完整的文档，下面是入口；本页是其中“GPU 基准与回归检查”这一块的总结。
+这个项目的全部文档都在这里，左侧目录按主题分组；本页是其中“GPU 基准与回归检查”这一块的总结。从哪里开始读，见[状态与入口](/projects/neural-bsdf-perf/status/)。
 
 ## 文档
 
-- **[系统架构]({{ '/projects/neural-bsdf-perf/architecture/' | relative_url }})**：组成、数据流、BSDF 契约、和 Substrate 延迟光照的衔接、当前限制。
-- **[性能报告]({{ '/projects/neural-bsdf-perf/performance/' | relative_url }})**：测到了什么、为什么慢、每一轮优化的结果，以及被推翻的判断。
-- **[GPU Trace 方法手册]({{ '/projects/neural-bsdf-perf/gpu-trace-guide/' | relative_url }})**：怎么录、怎么读，停顿原因、占用率换算，以及一次排查案例。
-- **[路线图与里程碑]({{ '/projects/neural-bsdf-perf/roadmap/' | relative_url }})**：目标、各阶段结果，以及现在的位置。
+- **项目**：[状态与入口](/projects/neural-bsdf-perf/status/) · [系统架构](/projects/neural-bsdf-perf/architecture/) · [路线图](/projects/neural-bsdf-perf/roadmap/) · [项目历程](/projects/neural-bsdf-perf/history/) · [捕获与对比](/projects/neural-bsdf-perf/capture-and-comparison/) · [Demo 计划](/projects/neural-bsdf-perf/demos/)
+- **里程碑**：[总览](/projects/neural-bsdf-perf/milestones/) · [M2 存储解耦](/projects/neural-bsdf-perf/milestones/m2-storage-decoupling/) · [M3 价值验证](/projects/neural-bsdf-perf/milestones/m3-value-validation/) · [M4 间接光代理](/projects/neural-bsdf-perf/milestones/m4-indirect-proxy/) · [M5 进阶](/projects/neural-bsdf-perf/milestones/m5-advanced/)
+- **性能**：[性能报告](/projects/neural-bsdf-perf/performance/) · [GPU Trace 方法手册](/projects/neural-bsdf-perf/gpu-trace-guide/)
+- **研究**：[全景与研究路线](/projects/neural-bsdf-perf/research/) · [波动光学](/projects/neural-bsdf-perf/wave-optics/) · [代码导读](/projects/neural-bsdf-perf/code-guide/) · [论文笔记（12 篇）](/projects/neural-bsdf-perf/papers/)
 
 ## 问题
 神经材质(Neural BSDF)接入 Unreal Engine 后,需要持续比较不同实现(Latent、QTP、Latent128、Slab 近似等)的 GPU 开销。靠手工记录单次结果,难以复现,也容易被环境波动误导。

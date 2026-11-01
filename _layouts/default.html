@@ -41,5 +41,23 @@
       <span><a href="https://github.com/{{ site.minima.social_links.github }}">GitHub</a></span>
     </div>
   </footer>
+  {% if page.mermaid %}
+  {% comment %} Diagrams in the docs are Mermaid. Pinned version with an integrity hash; if the script cannot load, the diagram stays readable as text. {% endcomment %}
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js" integrity="sha384-WmdflGW9aGfoBdHc4rRyWzYuAjEmDwMdGdiPNacbwfGKxBW/SO6guzuQ76qjnSlr" crossorigin="anonymous"></script>
+  <script>
+    (function () {
+      if (!window.mermaid) { return; }
+      document.querySelectorAll("pre > code.language-mermaid").forEach(function (code) {
+        var div = document.createElement("div");
+        div.className = "mermaid";
+        div.textContent = code.textContent;
+        code.parentNode.replaceWith(div);
+      });
+      var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+      mermaid.initialize({ startOnLoad: false, theme: dark ? "dark" : "default", securityLevel: "strict" });
+      mermaid.run({ querySelector: ".mermaid" });
+    })();
+  </script>
+  {% endif %}
 </body>
 </html>
