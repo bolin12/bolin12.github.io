@@ -90,11 +90,37 @@ nav: projects
 **怎么评估（设想）**
 沿用你神经材质基准的思路：同一批任务，分别用低价模型和强模型做，比较准确率和每千个任务的成本；再决定两级路由（低价模型粗筛，强模型复核），并把“成本”和“漏报率”都当成指标。
 
+## 代码层面读到的（2026-11-01，已拉到本地只读，没有运行）
+**Autopilot**（`autopilot/`、`bench/`）
+- `autopilot/kit/game.py` 等是 agent 的工具包：特权读取任意对象属性、`call` 蓝图函数、`view()` 读玩家看到什么、`screen()` 读界面文字、`ui()` 与 `ui_act()` 操作控件、`batch()` 一帧内批量读取；行动只有 `press/hold/mouse/turn`，直接写状态的 `set()` 要带理由并单独上报。
+- `autopilot/kit/harness.py`：`Harness` 类有 `goal`、`tempo`、`tick_hz`、`setup/observe/facts/options/status`；`Status` 的 `done/failed` 加 `evidence`；步骤的 `done(obs)` 读游戏状态，不看 agent 的话。
+- 引擎适配：`autopilot/engines/` 每个引擎一个适配器；插件和 Python 之间走 WebSocket（`ws://127.0.0.1:8765/v1/bridge`，协议在 `autopilot/bridge.py`）。
+- 记忆：`autopilot/memory.py`——`notes.md`（已验证的事实）、`lib.py`（可复用的 harness 代码）、`runs/<id>/`（版本、轨迹、报告）、`codex/`（游戏代码的文本副本）。
+- 评测：`bench/run_autopilot.py` 加 `bench/example.json`（每条提示带期望裁决 CONFIRMED / DENIED / achieved），无头运行（Unreal 用 `-game -nullrhi`），冷启动与 `--warm` 预热记忆可对比。
+- 测试：`tests/` 用模拟游戏，不需要引擎、密钥和网络。
+
+**VibeGame**（`src/`、`technical_report.pdf`）
+- `src/agents/`：architect、artist、auditor、designer、player、programmer、reviewer 的角色说明；`src/skills/` 有 build、edit、start、self-evolve；`src/skeletons/` 有五种类型的可运行骨架；`src/engine/` 有 `RuntimeBridge`、`RuntimeClock`、`SceneTree` 等（Phaser 之上的运行时控制）。
+- 技术报告（2026-08-17，南京大学 PRLab）：三个要求——agent 可操作的项目状态、基于交互的验证、保留已验证的经验；三个贡献——AI 原生引擎、对抗式智能体团队（编排者加设计、美术、架构、编程、审计、试玩、评审，共八个角色）、免训练的自进化（骨架、已验证模块、协作契约）。已读第 1–4 页（摘要、引言、相关工作），方法与评测部分还没读。
+- README 的路线图：Godot、Unity 支持，以及扩展到 3D。
+
+**video-to-game**（`skills/video-to-game/`）
+- 这是一个给 agent 用的 skill：`SKILL.md`、`references/`（study-the-video、fal-assets、game-loop、look-and-post、playtest）、`scripts/`（`study_video.py`、`fal_asset.py`、`record_play.mjs`、`best_window.py`、`side_by_side.py`）、`templates/`（`game.html`、`play.mjs`）。
+- 状态契约在 `references/game-loop.md`：`?autostart`、`?seed=N`、可选调试参数，以及只读的 `window.__game.state`（phase、位置、速度、是否着地等）。`references/playtest.md`：试玩只用键盘鼠标，读状态，**从不写入、不传送**。
+- `tests/check_repo.py` 检查仓库本身的一致性。注意：这些 skill 文件是写给 agent 的指令，我只是把它当文本读。
+
+## 待查的线索（来自 VibeGame 技术报告的相关工作）
+- **AutoUE**：在 Unreal Engine 里用多 agent 构建并测试游戏——和我的方向最近，优先找来读。
+- **GameDevBench**（Godot）、**GameCraft-Bench**：评测 agent 能否完成游戏开发任务、产出可交互验证的游戏；可借鉴评测方式。
+- **OpenGame**：端到端的网页游戏开发，积累可复用的模板与调试经验。
+- **DreamGarden**：用 LLM 规划，从一句提示迭代构建 UE 游戏环境。
+- **Trellis**、**agent-sprite-forge**：VibeGame 致谢里提到的 harness 设计与精灵生成的灵感来源。
+
 ## 阅读与试用清单
 
-- [ ] 读 VibeGame 的技术报告
+- [ ] 读完 VibeGame 技术报告的方法与评测部分（已读第 1–4 页）
 - [ ] 在隔离环境试装 Autopilot 的 UE 插件，跑一次“测试”提示，记录它留下什么证据
-- [ ] 拆解 video-to-game 的 `window.__game` 和录制脚本
+- [x] 读 video-to-game 的 `window.__game` 状态契约和试玩文档（录制脚本只读了说明）
 - [ ] 核实低价多模态模型的能力与价格，做一个小批量分诊实验
 - [ ] 把结论补进上面的对比表
 
