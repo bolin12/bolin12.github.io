@@ -7,6 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 order: 4
+side_title: 路线图
 ---
 更新：2026-10-23（路线图初稿 2026-10-18）。本文回答：这个项目要做什么、为什么值得做、目标架构是什么、分几个阶段、现在到哪了、哪些判断被推翻了。当前实现见[系统架构]({{ '/projects/neural-bsdf-perf/architecture/' | relative_url }})，测量数据见[性能报告]({{ '/projects/neural-bsdf-perf/performance/' | relative_url }})。
 

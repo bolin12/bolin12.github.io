@@ -1,11 +1,27 @@
 {% assign root_page = site.pages | where: "url", include.root | first %}
 {% assign kids = site.pages | where: "parent", include.root | sort: "order" %}
 <nav class="side" aria-label="项目目录">
-  <div class="side-title">{{ root_page.side_title | default: root_page.title }}</div>
-  <ul>
-    <li{% if page.url == root_page.url %} class="cur"{% endif %}><a href="{{ root_page.url | relative_url }}">概览</a></li>
+  <button type="button" class="side-toggle" aria-expanded="true" aria-controls="side-list">
+    <span class="caret" aria-hidden="true"></span><span class="side-title">{{ root_page.side_title | default: root_page.title }}</span>
+  </button>
+  <ul id="side-list">
+    <li{% if page.url == root_page.url %} class="cur"{% endif %}><a href="{{ root_page.url | relative_url }}"{% if page.url == root_page.url %} aria-current="page"{% endif %}>概览</a></li>
     {% for k in kids %}
-    <li{% if page.url == k.url %} class="cur"{% endif %}><a href="{{ k.url | relative_url }}">{{ k.side_title | default: k.title }}</a></li>
+    <li{% if page.url == k.url %} class="cur"{% endif %}><a href="{{ k.url | relative_url }}"{% if page.url == k.url %} aria-current="page"{% endif %}>{{ k.side_title | default: k.title }}</a></li>
     {% endfor %}
   </ul>
+  <script>
+    /* Clicking the project name folds or unfolds its pages. Every page load starts unfolded, so the current page is always visible and highlighted. */
+    (function () {
+      var nav = document.currentScript.parentNode;
+      var button = nav.querySelector(".side-toggle");
+      var list = nav.querySelector("ul");
+      button.addEventListener("click", function () {
+        var fold = !list.hidden;
+        list.hidden = fold;
+        button.setAttribute("aria-expanded", String(!fold));
+        nav.classList.toggle("folded", fold);
+      });
+    })();
+  </script>
 </nav>

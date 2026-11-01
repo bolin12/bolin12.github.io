@@ -7,6 +7,7 @@ nav: projects
 parent: /projects/neural-bsdf-perf/
 parent_title: 神经材质
 order: 3
+side_title: GPU Trace 手册
 ---
 更新：2026-10-21。本文回答：怎么用 Nsight Graphics 的 GPU Trace 测神经 BSDF 的性能——环境、录制、读法，以及我踩过的坑。结果见[性能报告]({{ '/projects/neural-bsdf-perf/performance/' | relative_url }})。这是在 UE + D3D12 + NVIDIA（Ada）上的经验，其他平台的命名可能不同。
 
