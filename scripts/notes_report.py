@@ -93,13 +93,14 @@ def main() -> int:
         for n in notes:
             lines.append(f"- 批注：{n}")
         lines.append("")
-    pages = sorted((ROOT / "projects").glob("*.md"))
-    lines += ["## 项目页（projects/）", ""]
+    pages = sorted((ROOT / "projects").glob("*.md")) + sorted((ROOT / "drafts").glob("*.md"))
+    lines += ["## 项目页（projects/ 已发布，drafts/ 草稿只在本地预览可见）", ""]
     for path in pages:
         published, todos, placeholders = page_notes(path)
         if not (todos or placeholders):
             continue
-        lines.append(f"### {path.name}（{'已发布' if published else '草稿，未发布'}）")
+        published = published and path.parent.name != "drafts"
+        lines.append(f"### {path.parent.name}/{path.name}（{'已发布' if published else '草稿，未发布'}）")
         for t in todos:
             lines.append(f"- [ ] **待补**：{t}")
             total += 1

@@ -1,2 +1,16 @@
-# Merged over _config.yml by scripts/preview.ps1 only: shows the author's notes in the local preview.
+# Merged over _config.yml by scripts/preview.ps1 only: shows the author's notes and the pages in drafts/.
 show_notes: true
+
+# Same list as _config.yml minus drafts/ (a later config replaces the whole list, so it is repeated here).
+exclude:
+  - resume/
+  - scripts/
+  - README.md
+  - NOTES.md
+  - vendor/
+  - .bundle/
+  - Gemfile
+  - Gemfile.lock
+  - _site_local/
+  - _site_public/
+  - _site_preview/

@@ -3,9 +3,8 @@ layout: page
 title: Agent 读写 UE 资源的效率与评测
 permalink: /projects/agent-asset-io/
 body_class: resume
-published: false
 ---
-<p class="note">（草稿骨架，未发布，也是一份**规划**：下面还没有做出来的结果，别当作已完成写进简历。把 front matter 里的 published: false 删掉即可上线。）</p>
+<p class="note">（草稿骨架，未发布，也是一份**规划**：下面还没有做出来的结果，别当作已完成写进简历。把这个文件从 drafts/ 移到 projects/ 即可上线。）</p>
 
 ## 问题
 Agent 要在 Unreal Engine 里读写资源（材质、蓝图、关卡、资产依赖），常见的做法是把资源整个序列化给模型看、整个再写回去，既占大量 token，也慢，还容易改错。业界现在越来越追求“一口气生成游戏”和“自动化调试”，这两件事的瓶颈都落在**资源读写的效率和可靠性**上。

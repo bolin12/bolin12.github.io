@@ -22,7 +22,10 @@ show_excerpts: true
 # Authoring notes are hidden on the published site. The local preview (scripts/preview.ps1) turns them on
 # through _config_local.yml.
 show_notes: false
+# drafts/ is left out of the published site and put back by _config_local.yml for the local preview.
+# Keep the two exclude lists in step (the local one is the same list without drafts/).
 exclude:
+  - drafts/
   - resume/
   - scripts/
   - README.md

@@ -29,13 +29,17 @@ FORBIDDEN_NAMES = {"NOTES.md", "resume.cls", "main.tex", "main_en.tex", "resume.
 
 
 def draft_permalinks(source: Path) -> list[str]:
-    """Permalinks of pages whose front matter says published: false."""
+    """Permalinks of draft pages: anything under drafts/, or with published: false in the front matter."""
     links = []
     for path in source.rglob("*.md"):
-        if any(part.startswith((".", "_site", "public_repo")) for part in path.relative_to(source).parts):
+        parts = path.relative_to(source).parts
+        if any(part.startswith((".", "_site", "public_repo", "vendor")) for part in parts):
             continue
         head = path.read_text(encoding="utf-8", errors="ignore").split("---")
-        if len(head) < 3 or not re.search(r"^published:\s*false\s*$", head[1], re.M):
+        if len(head) < 3:
+            continue
+        in_drafts = parts[0] == "drafts"
+        if not in_drafts and not re.search(r"^published:\s*false\s*$", head[1], re.M):
             continue
         match = re.search(r"^permalink:\s*(\S+)\s*$", head[1], re.M)
         if match:

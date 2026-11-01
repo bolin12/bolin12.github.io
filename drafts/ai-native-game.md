@@ -3,9 +3,8 @@ layout: page
 title: AI 原生游戏:生成与自动化调试
 permalink: /projects/ai-native-game/
 body_class: resume
-published: false
 ---
-<p class="note">（草稿骨架，未发布，也是一份**规划**：下面还没有做出来的结果，别当作已完成写进简历。把 front matter 里的 published: false 删掉即可上线。）</p>
+<p class="note">（草稿骨架，未发布，也是一份**规划**：下面还没有做出来的结果，别当作已完成写进简历。把这个文件从 drafts/ 移到 projects/ 即可上线。）</p>
 
 ## 为什么做这件事
 业界现在越来越追求两件事：**一口气生成一个能玩的游戏**，以及**自动化调试**。这两件事都把瓶颈压在同一处：agent 能不能高效、可靠地读写引擎资源，并且知道自己改得对不对。
@@ -28,6 +27,9 @@ published: false
 - **神经材质基准与回归**：同一套“固定任务、固定环境、可复现、有基线”的评测思路。
 
 <span class="note">（建议补：你想把这三块怎样串成一条故事线。）</span>
+
+## 参考项目
+正在考察的相关项目和我想回答的问题，见 [AI 原生游戏：参考项目]({{ '/projects/ai-native-game/references/' | relative_url }})（Autopilot、VibeGame、video-to-game，以及用低价多模态模型做批量工作的想法）。
 
 ## 阶段目标
 <span class="note">（建议补，先小后大，每一阶段都要有可度量的完成标准：
